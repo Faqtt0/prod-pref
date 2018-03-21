@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+
+    <changeSet id="1" author="Fagner" failOnError="true">
+        <comment>TABELA LANÇAMENTO</comment>
+        <createTable tableName="LANCAMENTO">
+            <column name="CODIGO" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="DESCRICAO" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DATA_VENCIMENTO" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="DATA_PAGAMENTO" type="DATE"/>
+            <column name="VALOR" type="DECIMAL(10, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="OBSERVACAO" type="VARCHAR(100)"/>
+            <column name="TIPO" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CODIGO_CATEGORIA" type="BIGINT(20)">
+                <constraints nullable="false"
+                             foreignKeyName="FK_LANCAMENTOS_CATEGORIA"
+                             references="CATEGORIA(CODIGO)"/>
+            </column>
+            <column name="CODIGO_PESSOA" type="BIGINT(20)">
+                <constraints nullable="false"
+                             foreignKeyName="FK_LANCAMENTOS_PESSOA"
+                             references="PESSOA(CODIGO)"/>
+            </column>
+        </createTable>
+
+        <modifySql dbms="mysql">
+            <append value="ENGINE=INNODB CHARSET=UTF8 "/>
+        </modifySql>
+    </changeSet>
+
+    <changeSet id="2" author="Fagner" failOnError="true">
+        <comment>INSERTS TABELA LANCAMENTOS</comment>
+        <sql splitStatements="true"
+             stripComments="false"
+             endDelimiter=";">
+            INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo,
+            codigo_categoria, codigo_pessoa) values ('Salário mensal', '2017-06-10', null, 6500.00, 'Distribuição de
+            lucros', 'RECEITA', 1, 1);
+            INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo,
+            codigo_categoria, codigo_pessoa) values ('Bahamas', '2017-02-10', '2017-02-10', 100.32, null, 'DESPESA', 2,
+            2);
+            INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo,
+            codigo_categoria, codigo_pessoa) values ('Top Club', '2017-06-10', null, 120, null, 'RECEITA', 3, 3);
+            INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo,
+            codigo_categoria, codigo_pessoa) values ('CEMIG', '2017-02-10', '2017-02-10', 110.44, 'Geração', 'RECEITA',
+            3, 4);
+            INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo,
+            codigo_categoria, codigo_pessoa) values ('DMAE', '2017-06-10', null, 200.30, null, 'DESPESA', 3, 5);
+            INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo,
+            codigo_categoria, codigo_pessoa) values ('Extra', '2017-03-10', '2017-03-10', 1010.32, null, 'RECEITA', 4,
+            6);
+            INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo,
+            codigo_categoria, codigo_pessoa) values ('Bahamas', '2017-06-10', null, 500, null, 'RECEITA', 1, 7);
+            INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo,
+            codigo_categoria, codigo_pessoa) values ('Top Club', '2017-03-10', '2017-03-10', 400.32, null, 'DESPESA', 4,
+            8);
+            INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo,
+            codigo_categoria, codigo_pessoa) values ('Despachante', '2017-06-10', null, 123.64, 'Multas', 'DESPESA', 3,
+            9);
+            INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo,
+            codigo_categoria, codigo_pessoa) values ('Pneus', '2017-04-10', '2017-04-10', 665.33, null, 'RECEITA', 5,
+            10);
+            INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo,
+            codigo_categoria, codigo_pessoa) values ('Café', '2017-06-10', null, 8.32, null, 'DESPESA', 1, 5);
+            INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo,
+            codigo_categoria, codigo_pessoa) values ('Eletrônicos', '2017-04-10', '2017-04-10', 2100.32, null,
+            'DESPESA', 5, 4);
+            INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo,
+            codigo_categoria, codigo_pessoa) values ('Instrumentos', '2017-06-10', null, 1040.32, null, 'DESPESA', 4,
+            3);
+            INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo,
+            codigo_categoria, codigo_pessoa) values ('Café', '2017-04-10', '2017-04-10', 4.32, null, 'DESPESA', 4, 2);
+            INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo,
+            codigo_categoria, codigo_pessoa) values ('Lanche', '2017-06-10', null, 10.20, null, 'DESPESA', 4, 1);
+        </sql>
+    </changeSet>
+</databaseChangeLog>
