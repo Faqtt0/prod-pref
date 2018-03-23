@@ -8,8 +8,13 @@ import java.util.List;
 
 public interface EnqueteRepository extends JpaRepository<Enquetes, Long> {
 
-    @Query(nativeQuery = true, value = "select * from enquete limit 100")
+    @Query(nativeQuery = true, value = "SELECT * FROM ENQUETE ORDER BY ID DESC limit 100")
     List<Enquetes> findByEnquetesLimit();
 
+    List<Enquetes> findByIdOrderByIdDesc(Long id);
+    List<Enquetes> findByDescricaoContainingOrderByDescricao(String descricao);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM ENQUETE WHERE ATIVO = TRUE ")
+    List<Enquetes> findByAtivoOrderByIdDesc();
 
 }

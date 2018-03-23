@@ -3,6 +3,7 @@ package prefrest.com.prod.model.enquetes;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
@@ -15,6 +16,7 @@ public class Enquetes {
     private Long id;
 
     @Size(min = 15, max = 150)
+    @NotNull
     private String descricao;
 
     private boolean ativo;
