@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Service;
 import prefrest.com.prod.model.enquetes.Enquetes;
 import prefrest.com.prod.repository.EnquetePersonRepository;
 import prefrest.com.prod.repository.EnqueteRepository;
@@ -12,7 +13,8 @@ import prefrest.com.prod.repository.filter.EnqueteFilter;
 
 import java.util.List;
 
-public class EnqueteRepositoryImpl implements EnquetePersonRepository {
+@Service
+public class EnquetePersonRepositoryImpl implements EnquetePersonRepository {
 
     @Autowired
     EnqueteRepository enqueteRepository;
@@ -23,28 +25,18 @@ public class EnqueteRepositoryImpl implements EnquetePersonRepository {
     @Autowired
     NamedParameterJdbcTemplate paramTemplate;
 
-    @Override
-    public Enquetes salvarEnquete(Enquetes enquete) {
+    private MapSqlParameterSource parameterSource;
+
+
+    public Integer getAtivo (){
         String sqlAtivo = "SELECT COUNT(ATIVO) FROM ENQUETE WHERE ATIVO = TRUE ";
+        return template.queryForObject(sqlAtivo, Integer.class);
+    }
+
+    public Integer dentroDataIntervalo (Enquetes enquete){
         String sqlDataIntervalo = "SELECT COUNT(*) FROM ENQUETE WHERE DATAFIM > :DTINI";
-        Integer rows = 0;
-        MapSqlParameterSource parameterSource;
-
-
-        if (enquete.isAtivo()){
-             rows = template.queryForObject(sqlAtivo, Integer.class);
-             if (rows == 0) {
-                 return enqueteRepository.save(enquete);
-             }
-        } else {
-            parameterSource = new MapSqlParameterSource().addValue("DTINI", enquete.getDataIni());
-            rows = paramTemplate.queryForObject(sqlDataIntervalo, parameterSource, Integer.class);
-            if (rows == 0) {
-                return enqueteRepository.save(enquete);
-            }
-        }
-
-        return null;
+        parameterSource = new MapSqlParameterSource().addValue("DTINI", enquete.getDataIni());
+        return paramTemplate.queryForObject(sqlDataIntervalo, parameterSource, Integer.class);
     }
 
     @Override
