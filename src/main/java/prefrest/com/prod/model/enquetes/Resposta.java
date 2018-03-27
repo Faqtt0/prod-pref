@@ -3,7 +3,7 @@ package prefrest.com.prod.model.enquetes;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class Respostas {
+public class Resposta {
     private Long codigo;
     @NotNull(message = "É necessário informar a pergunta a qual a resposta pertence")
     private Long codPergunta;

@@ -2,20 +2,19 @@ package prefrest.com.prod.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Component;
-import prefrest.com.prod.model.enquetes.Enquetes;
+import prefrest.com.prod.model.enquetes.Enquete;
 
 import java.util.List;
 
-public interface EnqueteRepository extends JpaRepository<Enquetes, Long> {
+public interface EnqueteRepository extends JpaRepository<Enquete, Long> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM ENQUETE ORDER BY ID DESC limit 100")
-    List<Enquetes> findByEnquetesLimit();
+    List<Enquete> findByEnquetesLimit();
 
-    List<Enquetes> findByIdOrderByIdDesc(Long id);
-    List<Enquetes> findByDescricaoContainingOrderByDescricao(String descricao);
+    List<Enquete> findByIdOrderByIdDesc(Long id);
+    List<Enquete> findByDescricaoContainingOrderByDescricao(String descricao);
 
     @Query(nativeQuery = true, value = "SELECT * FROM ENQUETE WHERE ATIVO = TRUE ")
-    List<Enquetes> findByAtivoOrderByIdDesc();
+    List<Enquete> findByAtivoOrderByIdDesc();
 
 }

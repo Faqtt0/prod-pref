@@ -63,7 +63,7 @@ public class PrefExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({ EnqueteNaoPermitidaException.class })
     public ResponseEntity<Object> handlePessoaInexistenteOuInativaException(EnqueteNaoPermitidaException ex) {
-        String mensagemUsuario = messageSource.getMessage("pessoa.inexistente-ou-inativa", null, LocaleContextHolder.getLocale());
+        String mensagemUsuario = messageSource.getMessage("enquete.nao.permitida", null, LocaleContextHolder.getLocale());
         String mensagemDesenvolvedor = ex.toString();
         List<PrefExceptionHandler.Erro> erros = Arrays.asList(new PrefExceptionHandler.Erro(mensagemUsuario, mensagemDesenvolvedor));
         return ResponseEntity.badRequest().body(erros);

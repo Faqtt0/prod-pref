@@ -5,8 +5,8 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class PerguntasID  implements Serializable{
+public class PerguntaID implements Serializable {
     private Long codigo;
-    private Enquetes enquetes;
+    private Enquete enquete;
 }
 

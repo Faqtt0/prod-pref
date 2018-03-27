@@ -31,9 +31,9 @@
     </changeSet>
 
     <changeSet id="2" author="Fagner">
-        <comment>TABELA PERGUNTAS</comment>
+        <comment>TABELA PERGUNTA</comment>
 
-        <createTable tableName="PERGUNTAS">
+        <createTable tableName="PERGUNTA">
             <column name="CODIGO" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false"
                              primaryKey="true"/>
@@ -42,7 +42,7 @@
             <column name="CODENQUETE" type="BIGINT">
                 <constraints nullable="false"
                              primaryKey="true"
-                             foreignKeyName="FK_PERGUNTAS_ENQUETE"
+                             foreignKeyName="FK_PERGUNTA_ENQUETE"
                              references="ENQUETE(ID)"/>
             </column>
 
@@ -63,9 +63,9 @@
 
 
     <changeSet id="3" author="Fagner">
-        <comment>TABELA RESPOSTAS</comment>
+        <comment>TABELA RESPOSTA</comment>
 
-        <createTable tableName="RESPOSTAS">
+        <createTable tableName="RESPOSTA">
             <column name="CODIGO" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false"
                              primaryKey="true"/>
@@ -95,14 +95,14 @@
     <changeSet id="4" author="Fagner" >
         <comment>FOREIGN KEY COMPOSTA TABELAS RESPOSTAS/PERGUNTAS</comment>
         <addForeignKeyConstraint baseColumnNames="CODPERGUNTA, CODENQUETE"
-                                 baseTableName="RESPOSTAS"
-                                 constraintName="FK_RESPOSTAS_PERGUNTAS"
+                                 baseTableName="RESPOSTA"
+                                 constraintName="FK_RESPOSTA_PERGUNTA"
                                  referencedColumnNames="CODIGO, CODENQUETE"
-                                 referencedTableName="PERGUNTAS"/>
+                                 referencedTableName="PERGUNTA"/>
     </changeSet>
 
     <changeSet id="5" author="Fagner" failOnError="false">
-        <comment>INSERT ENQUETES</comment>
+        <comment>INSERT ENQUETE</comment>
         <sqlFile
                 encoding="utf8"
                 path="db/changelog/sql/01-insert-enquetes.sql"

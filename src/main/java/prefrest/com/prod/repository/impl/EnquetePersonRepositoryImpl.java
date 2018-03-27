@@ -6,7 +6,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
-import prefrest.com.prod.model.enquetes.Enquetes;
+import prefrest.com.prod.model.enquetes.Enquete;
+import prefrest.com.prod.model.enquetes.Pergunta;
 import prefrest.com.prod.repository.EnquetePersonRepository;
 import prefrest.com.prod.repository.EnqueteRepository;
 import prefrest.com.prod.repository.filter.EnqueteFilter;
@@ -18,6 +19,7 @@ public class EnquetePersonRepositoryImpl implements EnquetePersonRepository {
 
     @Autowired
     EnqueteRepository enqueteRepository;
+
 
     @Autowired
     JdbcTemplate template;
@@ -33,14 +35,14 @@ public class EnquetePersonRepositoryImpl implements EnquetePersonRepository {
         return template.queryForObject(sqlAtivo, Integer.class);
     }
 
-    public Integer dentroDataIntervalo (Enquetes enquete){
-        String sqlDataIntervalo = "SELECT COUNT(*) FROM ENQUETE WHERE DATAFIM > :DTINI";
+    public Integer dentroDataIntervalo (Enquete enquete){
+        String sqlDataIntervalo = "SELECT COUNT(*) FROM ENQUETE WHERE DATAFIM >= :DTINI";
         parameterSource = new MapSqlParameterSource().addValue("DTINI", enquete.getDataIni());
         return paramTemplate.queryForObject(sqlDataIntervalo, parameterSource, Integer.class);
     }
 
     @Override
-    public List<Enquetes> filtrarEnquetes(EnqueteFilter enqueteFilter) {
+    public List<Enquete> filtrarEnquetes(EnqueteFilter enqueteFilter) {
         if (enqueteFilter.getId() != null){
             return enqueteRepository.findByIdOrderByIdDesc(enqueteFilter.getId());
         } else if (enqueteFilter.getDescricao() != null) {
@@ -53,12 +55,20 @@ public class EnquetePersonRepositoryImpl implements EnquetePersonRepository {
     }
 
     @Override
-    public Enquetes atualizarEnquete(Long codigo, Enquetes enquetes) {
+    public Enquete atualizarEnquete(Long codigo, Enquete enquete) {
         return null;
     }
 
     @Override
     public void removerEnquete() {
 
+    }
+
+    @Override
+    public Enquete carregadaDadosEnqueteParcial(Enquete enquete) {
+        String sql = "SELECT P.* FROM PERGUNTA P WHERE P.CODENQUETE = :ID";
+        parameterSource = new MapSqlParameterSource().addValue("ID", enquete.getId());
+        enquete.setPerguntas(paramTemplate.query(sql, parameterSource, new BeanPropertyRowMapper<>(Pergunta.class)));
+        return enquete;
     }
 }
