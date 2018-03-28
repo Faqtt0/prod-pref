@@ -1,5 +1,6 @@
 package prefrest.com.prod.repository.impl;
 
+import org.omg.CORBA.DATA_CONVERSION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,8 +11,10 @@ import prefrest.com.prod.model.enquetes.Enquete;
 import prefrest.com.prod.model.enquetes.Pergunta;
 import prefrest.com.prod.repository.EnquetePersonRepository;
 import prefrest.com.prod.repository.EnqueteRepository;
+import prefrest.com.prod.repository.PerguntaRepository;
 import prefrest.com.prod.repository.filter.EnqueteFilter;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -20,6 +23,8 @@ public class EnquetePersonRepositoryImpl implements EnquetePersonRepository {
     @Autowired
     EnqueteRepository enqueteRepository;
 
+    @Autowired
+    PerguntaRepository perguntaRepository;
 
     @Autowired
     JdbcTemplate template;
@@ -41,6 +46,7 @@ public class EnquetePersonRepositoryImpl implements EnquetePersonRepository {
         return paramTemplate.queryForObject(sqlDataIntervalo, parameterSource, Integer.class);
     }
 
+
     @Override
     public List<Enquete> filtrarEnquetes(EnqueteFilter enqueteFilter) {
         if (enqueteFilter.getId() != null){
@@ -54,10 +60,6 @@ public class EnquetePersonRepositoryImpl implements EnquetePersonRepository {
         return enqueteRepository.findByEnquetesLimit();
     }
 
-    @Override
-    public Enquete atualizarEnquete(Long codigo, Enquete enquete) {
-        return null;
-    }
 
     @Override
     public void removerEnquete() {
@@ -69,6 +71,28 @@ public class EnquetePersonRepositoryImpl implements EnquetePersonRepository {
         String sql = "SELECT P.* FROM PERGUNTA P WHERE P.CODENQUETE = :ID";
         parameterSource = new MapSqlParameterSource().addValue("ID", enquete.getId());
         enquete.setPerguntas(paramTemplate.query(sql, parameterSource, new BeanPropertyRowMapper<>(Pergunta.class)));
+        /*enquete.setPerguntas(perguntaRepository.findByEnquete_Id(enquete.getId()));*/
         return enquete;
+    }
+
+    @Override
+    public boolean isEditavel(Long idEnquete) {
+        Enquete enquete = enqueteRepository.findOne(idEnquete);
+
+        if (enquete.isAtivo() && getAtivo() > 0) {
+            return true;
+        } else if (!enquete.isAtivo() && enquete.getDataIni() != null) {
+            return isEnqueteEditData(enquete.getDataIni());
+        } else {
+            return true;
+        }
+
+    }
+
+    private boolean isEnqueteEditData(LocalDate dataIni) {
+        if (dataIni.isBefore(LocalDate.now())) {
+            return false;
+        }
+        return true;
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import prefrest.com.prod.event.RecursoEvent;
 import prefrest.com.prod.model.enquetes.Enquete;
+import prefrest.com.prod.model.enquetes.Resposta;
 import prefrest.com.prod.repository.EnquetePersonRepository;
 import prefrest.com.prod.repository.filter.EnqueteFilter;
 import prefrest.com.prod.service.EnqueteService;
@@ -45,11 +46,21 @@ public class EnqueteResource {
         return service.carregaEnqueteParcial(id);
     }
 
+    @GetMapping("/{id}/{codigo}")
+    public ResponseEntity<List<Resposta>> buscarRespostas (@PathVariable Long id, @PathVariable Long codigo){
+        return service.buscaRespostasPergunta(id, codigo);
+    }
+
     @PostMapping()
     public ResponseEntity<Enquete> salvarEnquete(@Valid @RequestBody Enquete enquete, HttpServletResponse response){
         Enquete enqueteSalva = service.salvar(enquete);
         publisher.publishEvent(new RecursoEvent(this, response, enqueteSalva.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(enqueteSalva);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Enquete> atualizarEnquete(@PathVariable Long id, @Valid @RequestBody Enquete enquete) {
+        return service.atualizaEnquete(id, enquete);
     }
 
     @DeleteMapping("/{codigo}")

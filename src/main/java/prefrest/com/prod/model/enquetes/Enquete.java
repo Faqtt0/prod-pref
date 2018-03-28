@@ -21,6 +21,7 @@ public class Enquete {
     @NotNull
     private String descricao;
 
+    @NotNull
     private boolean ativo;
 
     @Column(name = "DATAINI")

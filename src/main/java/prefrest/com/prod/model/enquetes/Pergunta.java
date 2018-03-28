@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Entity
-@Table(name = "PERGUNTAS")
+@Table(name = "PERGUNTA")
 @Data
 @IdClass(PerguntaID.class)
 public class Pergunta {
@@ -20,16 +20,22 @@ public class Pergunta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codigo;
 
-    @Id
+    /*@Id
     @ManyToOne
     @JoinColumn(name = "CODENQUETE")
-    private Enquete enquete;
+    private Enquete enquete;*/
+
+    @Id
+    @NotNull
+    @Column(name = "CODENQUETE")
+    private Long codEnquete;
 
     @NotNull
     @Size(min = 15, max = 1000)
     private String pergunta;
 
     @Enumerated(value = EnumType.STRING)
+    @Column(name = "TIPOPERGUNTA")
     private TipoPergunta tipoPergunta;
 
     @Transient

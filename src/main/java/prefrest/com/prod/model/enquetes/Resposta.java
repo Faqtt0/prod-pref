@@ -1,8 +1,11 @@
 package prefrest.com.prod.model.enquetes;
 
+import lombok.Data;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+@Data
 public class Resposta {
     private Long codigo;
     @NotNull(message = "É necessário informar a pergunta a qual a resposta pertence")

@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface EnquetePersonRepository  {
     List<Enquete> filtrarEnquetes(EnqueteFilter enqueteFilter);
-    Enquete atualizarEnquete (Long codigo, Enquete enquete);
     void removerEnquete();
     Integer getAtivo();
     Integer dentroDataIntervalo (Enquete enquete);
     Enquete carregadaDadosEnqueteParcial (Enquete enquete);
+    boolean isEditavel (Long idEnquete);
 
 }
