@@ -1,26 +1,46 @@
 package prefrest.com.prod.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import prefrest.com.prod.model.enquetes.Pergunta;
+import prefrest.com.prod.model.enquetes.Resposta;
+import prefrest.com.prod.repository.RespostaRepository;
+import prefrest.com.prod.service.RespostaService;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/respostas")
 public class RespostaResource {
 
-    @DeleteMapping("/{codigo}")
-    public void removerPergunta() {
+    @Autowired
+    RespostaRepository respostaRepository;
 
+    @Autowired
+    RespostaService service;
+
+    @Autowired
+    ApplicationEventPublisher publisher;
+
+    @DeleteMapping("/{codigo}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removerResposta(@PathVariable Long codigo) {
+        service.removerResposta(codigo);
     }
 
     @PostMapping()
-    public ResponseEntity<Pergunta> salvarPergunta() {
-        return null;
+    public ResponseEntity<Resposta> salvarResposta(@Valid @RequestBody Resposta resposta, HttpServletResponse response) {
+        return service.salvarResposta(resposta, response, publisher);
     }
 
     @PutMapping("/{codigo}")
-    public ResponseEntity<Pergunta> atualizarPergunta() {
-        return null;
+    public ResponseEntity<Resposta> atualizarReposta(@PathVariable Long codigo,
+                                                     @Valid @RequestBody Resposta resposta) {
+        return service.atualizarResposta(codigo, resposta);
     }
 
 }

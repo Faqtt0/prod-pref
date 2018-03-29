@@ -27,6 +27,7 @@ public class PerguntaService {
 
     public ResponseEntity<Pergunta> salvarPergunta(Pergunta pergunta, HttpServletResponse response, ApplicationEventPublisher publisher) {
         if (enquetePersonRepository.isEditavel(pergunta.getCodEnquete())){
+            pergunta.setCodigo(perguntaRepository.incrementCodigo());
             Pergunta perguntaSalva = perguntaRepository.save(pergunta);
             publisher.publishEvent(new RecursoEvent(this, response, perguntaSalva.getCodigo()));
             return ResponseEntity.status(HttpStatus.CREATED).body(perguntaSalva);
@@ -37,10 +38,10 @@ public class PerguntaService {
 
     public ResponseEntity<Pergunta> atualizarPergunta(Long codigo, Pergunta pergunta) {
         if (enquetePersonRepository.isEditavel(pergunta.getCodEnquete())){
-            Pergunta perguntaSalva = perguntaRepository.findOne(new PerguntaID(pergunta.getCodigo(), pergunta.getCodEnquete()));
+            Pergunta perguntaSalva = perguntaRepository.findOne(new PerguntaID(codigo, pergunta.getCodEnquete()));
             if (perguntaSalva != null) {
                 BeanUtils.copyProperties(pergunta, perguntaSalva, "codigo");
-                perguntaRepository.save(perguntaSalva);
+                return  ResponseEntity.ok().body(perguntaRepository.save(perguntaSalva));
             } else{
                 return ResponseEntity.badRequest().build();
             }

@@ -17,7 +17,6 @@ import java.util.List;
 @IdClass(PerguntaID.class)
 public class Pergunta {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codigo;
 
     /*@Id
