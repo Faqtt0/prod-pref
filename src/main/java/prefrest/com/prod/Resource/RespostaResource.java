@@ -27,9 +27,11 @@ public class RespostaResource {
     ApplicationEventPublisher publisher;
 
     @DeleteMapping("/{codigo}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removerResposta(@PathVariable Long codigo) {
-        service.removerResposta(codigo);
+    public ResponseEntity removerResposta(@PathVariable Long codigo) {
+        if (service.removerResposta(codigo)){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping()

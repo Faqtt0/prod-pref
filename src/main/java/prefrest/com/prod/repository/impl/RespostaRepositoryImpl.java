@@ -67,12 +67,16 @@ public class RespostaRepositoryImpl implements RespostaRepository {
     }
 
     @Override
-    public void removerRespostaById(Long codigo) {
-
+    public boolean removerRespostaById(Long codigo) {
+        String sql = "DELETE FROM RESPOSTA WHERE RESPOSTA = :CODIGO";
+        MapSqlParameterSource params = new MapSqlParameterSource().addValue("CODIGO", codigo);
+        return template.update(sql, params) > 0;
     }
 
     @Override
-    public void removerRespostasAll(Long codEnquete) {
-
+    public boolean removerRespostasAll(Long codEnquete) {
+        String sql = "DELETE FROM RESPOSTA WHERE CODENQUETE = :ENQUETE";
+        MapSqlParameterSource params = new MapSqlParameterSource().addValue("ENQUETE", codEnquete);
+        return template.update(sql, params) > 0;
     }
 }

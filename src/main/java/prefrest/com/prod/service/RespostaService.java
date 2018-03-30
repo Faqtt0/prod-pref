@@ -23,7 +23,7 @@ public class RespostaService {
 
 
     public ResponseEntity<Resposta> salvarResposta(Resposta resposta, HttpServletResponse response, ApplicationEventPublisher publisher) {
-        if (enquetePersonRepository.isEditavel(resposta.getCodEnquete())){
+        if (isEditavelEnquete(resposta)){
             Resposta respostaSalva = respostaRepository.salvarResposta(resposta);
             publisher.publishEvent(new RecursoEvent(this, response, respostaSalva.getCodigo()));
             return ResponseEntity.status(HttpStatus.CREATED).body(respostaSalva);
@@ -33,7 +33,7 @@ public class RespostaService {
 
     public ResponseEntity<Resposta> atualizarResposta(Long codigo, Resposta resposta) {
 
-        if (enquetePersonRepository.isEditavel(resposta.getCodEnquete())){
+        if (isEditavelEnquete(resposta)){
             Resposta respostaSalva = respostaRepository.findById(codigo);
             BeanUtils.copyProperties(resposta, respostaSalva, "codigo");
             Resposta respostaAtualizada = respostaRepository.atualizarResposta(resposta);
@@ -47,7 +47,18 @@ public class RespostaService {
     }
 
 
-    public void removerResposta(Long codigo) {
+    public boolean removerResposta(Long codigo) {
+        Resposta respostaSalva = respostaRepository.findById(codigo);
+        if (isEditavelEnquete(respostaSalva)){
+            return respostaRepository.removerRespostaById(codigo);
+        }
 
+        return false;
     }
+
+    private boolean isEditavelEnquete(Resposta respostaSalva) {
+        return enquetePersonRepository.isEditavel(respostaSalva.getCodEnquete());
+    }
+
+
 }

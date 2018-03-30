@@ -10,7 +10,7 @@ public interface RespostaRepository {
     Resposta atualizarResposta (Resposta resposta);
     Resposta findById (Long id);
     Long incrementaResposta();
-    void removerRespostaById(Long codigo);
-    void removerRespostasAll(Long codEnquete);
+    boolean removerRespostaById(Long codigo);
+    boolean removerRespostasAll(Long codEnquete);
 
 }
