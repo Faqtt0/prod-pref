@@ -9,6 +9,7 @@ import prefrest.com.prod.model.enquetes.Enquete;
 import prefrest.com.prod.model.enquetes.Resposta;
 import prefrest.com.prod.repository.EnquetePersonRepository;
 import prefrest.com.prod.repository.EnqueteRepository;
+import prefrest.com.prod.repository.PerguntaPersonRepository;
 import prefrest.com.prod.repository.RespostaRepository;
 
 import java.util.List;
@@ -21,6 +22,12 @@ public class EnqueteService {
 
     @Autowired
     EnquetePersonRepository repositoryPerson;
+
+    @Autowired
+    PerguntaPersonRepository perguntaPersonRepository;
+
+    @Autowired
+    RespostaRepository respostaRepository;
 
     @Autowired
     RespostaRepository respostaRepository;
@@ -79,6 +86,14 @@ public class EnqueteService {
             }
         }
 
+        return false;
+    }
+
+    public boolean deletarEnquete(Long codigo) {
+        if (repositoryPerson.isEditavel(codigo)){
+
+            return true;
+        }
         return false;
     }
 }

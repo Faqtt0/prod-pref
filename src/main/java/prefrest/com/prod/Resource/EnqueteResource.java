@@ -64,7 +64,10 @@ public class EnqueteResource {
     }
 
     @DeleteMapping("/{codigo}")
-    public void remover (@PathVariable Long codigo) {
-        //TODO implementar o método de deletar
+    public ResponseEntity remover (@PathVariable Long codigo) {
+        if (service.deletarEnquete(codigo)){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
 }

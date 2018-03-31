@@ -65,9 +65,23 @@ public class RespostaRepositoryImpl implements RespostaRepository {
     }
 
     @Override
+    public List<Resposta> findByPergunta(Long codigo) {
+        String sql = "SELECT * FROM RESPOSTA WHERE CODPERGUNTA = :CODPERGUNTA";
+        MapSqlParameterSource params =  new MapSqlParameterSource().addValue("CODPERGUNTA", codigo);
+        return template.query(sql, params, new BeanPropertyRowMapper<>(Resposta.class));
+    }
+
+    @Override
     public boolean removerRespostaById(Long codigo) {
-        String sql = "DELETE FROM RESPOSTA WHERE RESPOSTA = :CODIGO";
+        String sql = "DELETE FROM RESPOSTA WHERE CODIGO = :CODIGO";
         MapSqlParameterSource params = new MapSqlParameterSource().addValue("CODIGO", codigo);
+        return template.update(sql, params) > 0;
+    }
+
+    @Override
+    public boolean removeRespostasByPergunta(Long codPergunta) {
+        String sql = "DELETE FROM RESPOSTA WHERE CODPERGUNTA = :CODPERGUNTA";
+        MapSqlParameterSource params = new MapSqlParameterSource().addValue("CODPERGUNTA", codPergunta);
         return template.update(sql, params) > 0;
     }
 
@@ -76,12 +90,5 @@ public class RespostaRepositoryImpl implements RespostaRepository {
         String sql = "DELETE FROM RESPOSTA WHERE CODENQUETE = :ENQUETE";
         MapSqlParameterSource params = new MapSqlParameterSource().addValue("ENQUETE", codEnquete);
         return template.update(sql, params) > 0;
-    }
-
-    @Override
-    public List<Resposta> findByPergunta(Long codigo) {
-        String sql = "SELECT * FROM RESPOSTA WHERE CODPERGUNTA = :CODPERGUNTA";
-        MapSqlParameterSource params =  new MapSqlParameterSource().addValue("CODPERGUNTA", codigo);
-        return template.query(sql, params, new BeanPropertyRowMapper<>(Resposta.class));
     }
 }

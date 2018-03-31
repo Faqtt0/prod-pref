@@ -25,9 +25,11 @@ public class PerguntaResource {
     ApplicationEventPublisher publisher;
 
     @DeleteMapping("/{codigo}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removerPergunta() {
-        //TODO Deletar pergunta tem que deletar respostas
+    public ResponseEntity removerPergunta(@PathVariable Long codigo) {
+        if (service.deletarPerguntas(codigo)){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping()

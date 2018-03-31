@@ -11,4 +11,5 @@ public interface PerguntaRepository extends JpaRepository<Pergunta, PerguntaID> 
 
     @Query(nativeQuery = true, value =  "SELECT COALESCE(MAX(CODIGO),0) + 1 AS CODIGO FROM PERGUNTA")
     Long incrementCodigo ();
+
 }

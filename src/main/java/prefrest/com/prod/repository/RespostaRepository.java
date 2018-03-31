@@ -12,6 +12,8 @@ public interface RespostaRepository {
     List<Resposta> findByPergunta (Long codigo);
     Long incrementaResposta();
     boolean removerRespostaById(Long codigo);
+    boolean removeRespostasByPergunta(Long codPergunta);
     boolean removerRespostasAll(Long codEnquete);
+
 
 }
