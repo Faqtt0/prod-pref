@@ -38,6 +38,8 @@ public class PrefExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, erros, headers, status, request);
     }
 
+
+
     //Utilizado pra os argumentos conforme o bean validation
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {

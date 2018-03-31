@@ -71,7 +71,6 @@ public class EnquetePersonRepositoryImpl implements EnquetePersonRepository {
         String sql = "SELECT P.* FROM PERGUNTA P WHERE P.CODENQUETE = :ID";
         parameterSource = new MapSqlParameterSource().addValue("ID", enquete.getId());
         enquete.setPerguntas(paramTemplate.query(sql, parameterSource, new BeanPropertyRowMapper<>(Pergunta.class)));
-        /*enquete.setPerguntas(perguntaRepository.findByEnquete_Id(enquete.getId()));*/
         return enquete;
     }
 
@@ -82,15 +81,17 @@ public class EnquetePersonRepositoryImpl implements EnquetePersonRepository {
         if (enquete.isAtivo() && getAtivo() > 0) {
             return true;
         } else if (!enquete.isAtivo() && enquete.getDataIni() != null) {
-            return isEnqueteEditData(enquete.getDataIni());
+            return isEnqueteEditData(enquete.getDataIni(), enquete.getDataFim());
         } else {
             return true;
         }
 
     }
 
-    private boolean isEnqueteEditData(LocalDate dataIni) {
-        if (dataIni.isBefore(LocalDate.now())) {
+    private boolean isEnqueteEditData(LocalDate dataIni, LocalDate dataFim) {
+        if (dataIni.isBefore(LocalDate.now()) && LocalDate.now().isBefore(dataFim)) {
+            return true;
+        } else if (dataIni.isBefore(LocalDate.now())) {
             return false;
         }
         return true;

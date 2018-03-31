@@ -28,7 +28,7 @@ public class RespostaService {
             publisher.publishEvent(new RecursoEvent(this, response, respostaSalva.getCodigo()));
             return ResponseEntity.status(HttpStatus.CREATED).body(respostaSalva);
         }
-        return ResponseEntity.unprocessableEntity().build();
+        return ResponseEntity.badRequest().build();
     }
 
     public ResponseEntity<Resposta> atualizarResposta(Long codigo, Resposta resposta) {

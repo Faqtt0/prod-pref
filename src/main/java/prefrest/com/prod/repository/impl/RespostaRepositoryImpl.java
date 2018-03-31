@@ -1,7 +1,6 @@
 package prefrest.com.prod.repository.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -11,7 +10,6 @@ import prefrest.com.prod.model.enquetes.Resposta;
 import prefrest.com.prod.repository.RespostaRepository;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class RespostaRepositoryImpl implements RespostaRepository {
@@ -78,5 +76,12 @@ public class RespostaRepositoryImpl implements RespostaRepository {
         String sql = "DELETE FROM RESPOSTA WHERE CODENQUETE = :ENQUETE";
         MapSqlParameterSource params = new MapSqlParameterSource().addValue("ENQUETE", codEnquete);
         return template.update(sql, params) > 0;
+    }
+
+    @Override
+    public List<Resposta> findByPergunta(Long codigo) {
+        String sql = "SELECT * FROM RESPOSTA WHERE CODPERGUNTA = :CODPERGUNTA";
+        MapSqlParameterSource params =  new MapSqlParameterSource().addValue("CODPERGUNTA", codigo);
+        return template.query(sql, params, new BeanPropertyRowMapper<>(Resposta.class));
     }
 }

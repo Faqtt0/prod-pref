@@ -9,6 +9,7 @@ public interface RespostaRepository {
     Resposta salvarResposta (Resposta resposta);
     Resposta atualizarResposta (Resposta resposta);
     Resposta findById (Long id);
+    List<Resposta> findByPergunta (Long codigo);
     Long incrementaResposta();
     boolean removerRespostaById(Long codigo);
     boolean removerRespostasAll(Long codEnquete);

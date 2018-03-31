@@ -10,11 +10,14 @@ import prefrest.com.prod.event.RecursoEvent;
 import prefrest.com.prod.model.enquetes.Enquete;
 import prefrest.com.prod.model.enquetes.Pergunta;
 import prefrest.com.prod.model.enquetes.PerguntaID;
+import prefrest.com.prod.model.enquetes.Resposta;
 import prefrest.com.prod.repository.EnquetePersonRepository;
 import prefrest.com.prod.repository.EnqueteRepository;
 import prefrest.com.prod.repository.PerguntaRepository;
+import prefrest.com.prod.repository.RespostaRepository;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Service
 public class PerguntaService {
@@ -23,6 +26,9 @@ public class PerguntaService {
 
     @Autowired
     PerguntaRepository perguntaRepository;
+
+    @Autowired
+    RespostaRepository respostaRepository;
 
 
     public ResponseEntity<Pergunta> salvarPergunta(Pergunta pergunta, HttpServletResponse response, ApplicationEventPublisher publisher) {
@@ -47,5 +53,9 @@ public class PerguntaService {
             }
         }
         return ResponseEntity.badRequest().build();
+    }
+
+    public ResponseEntity<List<Resposta>> buscarRepostas(Long codigo) {
+        return ResponseEntity.ok().body(respostaRepository.findByPergunta(codigo));
     }
 }

@@ -7,10 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import prefrest.com.prod.model.enquetes.Enquete;
 import prefrest.com.prod.model.enquetes.Pergunta;
+import prefrest.com.prod.model.enquetes.Resposta;
 import prefrest.com.prod.service.PerguntaService;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/perguntas")
@@ -38,6 +40,11 @@ public class PerguntaResource {
     public ResponseEntity<Pergunta> atualizarPergunta(@PathVariable Long codigo,
                                                       @Valid @RequestBody Pergunta pergunta) {
         return service.atualizarPergunta(codigo, pergunta);
+    }
+
+    @GetMapping("/{codigo}")
+    public ResponseEntity<List<Resposta>> retornaRepostas(@PathVariable Long codigo) {
+        return service.buscarRepostas(codigo);
     }
 
 }
