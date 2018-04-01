@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+
+    <changeSet id="1" author="Fagner" failOnError="true">
+        <comment>TABELA SEGMENTO</comment>
+        <createTable tableName="SEGMENTO">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+
+            <column name="DESCRICAO" type="VARCHAR(150)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <modifySql dbms="mysql">
+            <append value="ENGINE=INNODB CHARSET=UTF8 "/>
+        </modifySql>
+    </changeSet>
+
+    <changeSet id="2" author="Fagner" failOnError="true">
+        <comment>TABELA EMPRESA</comment>
+        <createTable tableName="EMPRESA">
+            <column name="CODIGO" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+
+            <column name="CODSEGMENTO" type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             foreignKeyName="FK_EMPRESA_SEGMENTO"
+                             references="SEGMENTO(ID)"/>
+            </column>
+
+            <column name="DESCRICAO" type="VARCHAR(150)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="ENDERECO" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="BAIRRO" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="NUMERO" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="TELEFONE" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="EMAIL" type="VARCHAR(150)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <modifySql dbms="mysql">
+            <append value="ENGINE=INNODB CHARSET=UTF8 "/>
+        </modifySql>
+    </changeSet>
+</databaseChangeLog>
