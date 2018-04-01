@@ -21,16 +21,16 @@ public class EnqueteService {
     EnqueteRepository repository;
 
     @Autowired
-    EnquetePersonRepository repositoryPerson;
-
-    @Autowired
     PerguntaPersonRepository perguntaPersonRepository;
 
     @Autowired
     RespostaRepository respostaRepository;
 
     @Autowired
-    RespostaRepository respostaRepository;
+    EnquetePersonRepository repositoryPerson;
+
+
+
 
     public Enquete salvar(Enquete enquete){
         return verificaSalvaEnquete(enquete);
@@ -91,7 +91,9 @@ public class EnqueteService {
 
     public boolean deletarEnquete(Long codigo) {
         if (repositoryPerson.isEditavel(codigo)){
-
+            respostaRepository.removerRespostasAll(codigo);
+            perguntaPersonRepository.removerByEnquete(codigo);
+            repository.delete(codigo);
             return true;
         }
         return false;

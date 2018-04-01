@@ -19,4 +19,11 @@ public class PerguntaPersonRepositoryImpl implements PerguntaPersonRepository {
         MapSqlParameterSource params = new MapSqlParameterSource().addValue("CODIGO", codigoPergunta);
         return template.queryForObject(sql, params, new BeanPropertyRowMapper<>(Pergunta.class));
     }
+
+    @Override
+    public boolean removerByEnquete(Long codigo) {
+        String sql = "DELETE FROM PERGUNTA WHERE CODENQUETE = :CODENQUETE";
+        MapSqlParameterSource params = new MapSqlParameterSource().addValue("CODENQUETE", codigo);
+        return template.update(sql, params) > 0;
+    }
 }

@@ -62,11 +62,6 @@ public class EnquetePersonRepositoryImpl implements EnquetePersonRepository {
 
 
     @Override
-    public void removerEnquete() {
-
-    }
-
-    @Override
     public Enquete carregadaDadosEnqueteParcial(Enquete enquete) {
         String sql = "SELECT P.* FROM PERGUNTA P WHERE P.CODENQUETE = :ID";
         parameterSource = new MapSqlParameterSource().addValue("ID", enquete.getId());
