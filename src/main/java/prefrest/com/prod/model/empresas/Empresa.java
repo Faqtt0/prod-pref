@@ -1,6 +1,7 @@
 package prefrest.com.prod.model.empresas;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -9,13 +10,14 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "EMPRESA")
 @Data
+@NoArgsConstructor
 public class Empresa {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long codigo;
 
     @NotNull
-    @Column(name = "CODEMPRESA")
+    @Column(name = "CODSEGMENTO")
     private Long codEmpresa;
 
     @NotNull

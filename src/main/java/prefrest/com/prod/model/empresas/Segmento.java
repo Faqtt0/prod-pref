@@ -1,6 +1,7 @@
 package prefrest.com.prod.model.empresas;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "SEGMENTO")
+@NoArgsConstructor
 public class Segmento {
 
     @Id
