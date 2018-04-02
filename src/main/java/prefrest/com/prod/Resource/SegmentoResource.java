@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import prefrest.com.prod.model.empresas.Empresa;
 import prefrest.com.prod.model.empresas.Segmento;
-import prefrest.com.prod.repository.EmpresasRespository;
+import prefrest.com.prod.repository.EmpresaRespository;
 import prefrest.com.prod.repository.SegmentoRepository;
 import prefrest.com.prod.service.SegmentoService;
 
@@ -23,7 +23,7 @@ public class SegmentoResource {
     SegmentoRepository segmentoRepository;
 
     @Autowired
-    EmpresasRespository empresasRespository;
+    EmpresaRespository empresaRespository;
 
     @Autowired
     ApplicationEventPublisher publisher;
@@ -39,7 +39,7 @@ public class SegmentoResource {
 
     @GetMapping("/{codigo}")
     public ResponseEntity<List<Empresa>> getEmpresasSegmento(){
-        return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(empresasRespository.findAll());
+        return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(empresaRespository.findAll());
     }
 
     @PostMapping()
@@ -53,9 +53,9 @@ public class SegmentoResource {
     }
 
     @DeleteMapping("/{codigo}")
-    public ResponseEntity removerSegmento(){
-        //TODO deletar Segmento
-        return null;
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removerSegmento(@PathVariable Long codigo){
+        service.deletarSegmentoEmpresa(codigo);
     }
 
 

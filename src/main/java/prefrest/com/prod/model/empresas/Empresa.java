@@ -18,16 +18,16 @@ public class Empresa {
 
     @NotNull
     @Column(name = "CODSEGMENTO")
-    private Long codEmpresa;
+    private Long codSegmento;
 
     @NotNull
     @Size(min = 3, max = 150)
     private String descricao;
 
-    @Size(min = 10, max = 200)
+    @Size(min = 5, max = 200)
     private String endereco;
 
-    @Size(min = 5, max=10)
+    @Size(min = 5, max=100)
     private String bairro;
 
     private Integer numero;
