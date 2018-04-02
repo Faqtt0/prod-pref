@@ -11,6 +11,17 @@
                 <constraints nullable="false" unique="true" primaryKey="true"/>
             </column>
 
+            <column name="DESCRICAO" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="IMAGEM" type="LONGBLOB" >
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="ORDEM" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
         <modifySql dbms="mysql">
