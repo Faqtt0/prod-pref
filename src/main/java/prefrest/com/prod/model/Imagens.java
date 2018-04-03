@@ -7,6 +7,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "IMAGENS")
@@ -21,10 +24,13 @@ public class Imagens {
     private String descricao;
 
     @JsonIgnore
-    private byte[] imagem;
+    private String imagem;
 
     @NotNull
     private Integer ordem;
 
+    @JsonIgnore
+    @Column(name = "ULTALT")
+    private LocalDateTime ultAlt;
 
 }

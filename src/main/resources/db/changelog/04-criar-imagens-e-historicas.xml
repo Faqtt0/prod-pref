@@ -15,17 +15,18 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="IMAGEM" type="LONGBLOB" >
-                <constraints nullable="false"/>
-            </column>
+            <column name="IMAGEM" type="LONGBLOB" />
 
             <column name="ORDEM" type="INTEGER">
                 <constraints nullable="false"/>
             </column>
+
+            <column name="ULTALT" type="TIMESTAMP"/>
         </createTable>
 
         <modifySql dbms="mysql">
             <append value="ENGINE=INNODB CHARSET=UTF8 "/>
         </modifySql>
+
     </changeSet>
 </databaseChangeLog>

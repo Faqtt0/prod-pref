@@ -23,4 +23,5 @@ public class RecursoListener implements ApplicationListener<RecursoEvent> {
                 .buildAndExpand(codigo).toUri();
         response.setHeader("Location", uri.toASCIIString());
     }
+
 }
