@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import prefrest.com.prod.exception.EnqueteNaoPermitidaException;
+import prefrest.com.prod.exception.ImagemNaoEncontradaException;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -69,6 +72,30 @@ public class PrefExceptionHandler extends ResponseEntityExceptionHandler {
         String mensagemDesenvolvedor = ex.toString();
         List<PrefExceptionHandler.Erro> erros = Arrays.asList(new PrefExceptionHandler.Erro(mensagemUsuario, mensagemDesenvolvedor));
         return ResponseEntity.badRequest().body(erros);
+    }
+
+    @ExceptionHandler({ ImagemNaoEncontradaException.class })
+    public ResponseEntity<Object> handleImagemNaoEncontradaException(ImagemNaoEncontradaException ex) {
+        String mensagemUsuario = messageSource.getMessage("imagem.nao-encontrada", null, LocaleContextHolder.getLocale());
+        String mensagemDesenvolvedor = ex.toString();
+        List<PrefExceptionHandler.Erro> erros = Arrays.asList(new PrefExceptionHandler.Erro(mensagemUsuario, mensagemDesenvolvedor));
+        return ResponseEntity.badRequest().body(erros);
+    }
+
+    @ExceptionHandler({FileNotFoundException.class})
+    public ResponseEntity<Object> handleFileNotFoundException(FileNotFoundException ex, WebRequest request) {
+        String mensagemUsuario = messageSource.getMessage("imagem.nao-encontrada", null, LocaleContextHolder.getLocale());
+        String mensagemDesenvolvedor = ex.toString();
+        List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+        return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler({IOException.class})
+    public ResponseEntity<Object> handleIOException(IOException ex, WebRequest request) {
+        String mensagemUsuario = messageSource.getMessage("arquivo.leitura", null, LocaleContextHolder.getLocale());
+        String mensagemDesenvolvedor = ex.toString();
+        List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+        return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     private List<Erro> criarListaDeErros(BindingResult bindingResult) {

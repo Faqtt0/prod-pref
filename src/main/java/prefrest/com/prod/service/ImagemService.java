@@ -9,11 +9,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import prefrest.com.prod.constants.Constants;
 import prefrest.com.prod.event.RecursoEvent;
+import prefrest.com.prod.exception.ImagemNaoEncontradaException;
 import prefrest.com.prod.model.Imagens;
 import prefrest.com.prod.repository.ImagemRepository;
 import prefrest.com.prod.repository.ImagemRepositoryPerson;
-import prefrest.com.prod.repository.impl.ImagemRepositoryPersonImpl;
+import prefrest.com.prod.repository.filter.ImagensFilter;
+import prefrest.com.prod.util.UtilBase64Image;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -28,7 +31,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.Iterator;
+import java.util.Base64;
+import java.util.List;
 
 @Service
 public class ImagemService {
@@ -37,7 +41,6 @@ public class ImagemService {
     @Autowired
     ImagemRepositoryPerson imagemRepositoryPerson;
 
-    private String diretorio = new File("").getAbsoluteFile().getParent() + "\\imagens";
     private BufferedImage bufferedImage;
 
 
@@ -64,7 +67,7 @@ public class ImagemService {
                     salvaImagemJpg(file);
 
                 }
-                diretorioImagem = diretorio + "\\" + file.getOriginalFilename();
+                diretorioImagem = Constants.DIRETORIO_IMAGENS + "\\" + file.getOriginalFilename();
             }
             if (diretorioImagem != null) {
                 Imagens imagemSalva = imagemRepository.findOne(codigo);
@@ -85,7 +88,7 @@ public class ImagemService {
     private void salvaImagemJpg(MultipartFile file) throws IOException {
         //Salva a imagem primeiro no diretório
         byte[] bytes = file.getBytes();
-        Path path = Paths.get(diretorio + "\\" + file.getOriginalFilename());
+        Path path = Paths.get(Constants.DIRETORIO_IMAGENS + "\\" + file.getOriginalFilename());
         Files.write(path, bytes);
     }
 
@@ -93,7 +96,7 @@ public class ImagemService {
         InputStream in = new ByteArrayInputStream(file.getBytes());
         BufferedImage image = ImageIO.read(in);
 
-        File output = new File(diretorio + "\\" + file.getOriginalFilename());
+        File output = new File(Constants.DIRETORIO_IMAGENS + "\\" + file.getOriginalFilename());
         OutputStream out = new FileOutputStream(output);
 
         ImageWriter writer = ImageIO.getImageWritersByFormatName(FilenameUtils.getExtension(file.getOriginalFilename())).next();
@@ -124,7 +127,7 @@ public class ImagemService {
                     bufferedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
             newBufferedImage.createGraphics().drawImage(bufferedImage, 0, 0, Color.WHITE, null);
 
-            String diretorioImagem = diretorio + "\\" +
+            String diretorioImagem = Constants.DIRETORIO_IMAGENS + "\\" +
                     file.getOriginalFilename().replace(FilenameUtils.getExtension(file.getOriginalFilename()), "") + "jpg";
             // write to jpeg file
             ImageIO.write(newBufferedImage, "jpg", new File(diretorioImagem));
@@ -137,7 +140,7 @@ public class ImagemService {
 
     private Boolean isDiretorioCriado() {
 
-        File folder = new File(diretorio);
+        File folder = new File(Constants.DIRETORIO_IMAGENS);
         if (!folder.exists()) {
             if (folder.mkdir()) {
                 return true;
@@ -161,5 +164,25 @@ public class ImagemService {
             return ResponseEntity.badRequest().build();
         }
 
+    }
+
+    public ResponseEntity<List<Imagens>> getImagens(ImagensFilter filter) {
+        List<Imagens> imagens = imagemRepositoryPerson.getImagens(filter);
+        if (imagens.size() > 0) {
+            imagens.forEach(item -> {
+                if (item.getImagem() != null){
+                    item.setImagemBase64(UtilBase64Image.encoder(item.getImagem()));
+                }
+
+            });
+        }
+        return ResponseEntity.ok().body(imagens);
+    }
+
+    public void deletarImagem(Long codigo)  {
+        Imagens imagemSalva = imagemRepository.findOne(codigo);
+        File imagem = new File(imagemSalva.getImagem());
+        imagem.delete();
+        imagemRepository.delete(codigo);
     }
 }
