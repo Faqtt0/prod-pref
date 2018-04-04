@@ -26,6 +26,9 @@ public class Imagens {
     @JsonIgnore
     private String imagem;
 
+    @Transient
+    private String ImagemBase64;
+
     @NotNull
     private Integer ordem;
 

@@ -24,7 +24,7 @@ public class ImagemResource {
     @Autowired
     ApplicationEventPublisher publisher;
 
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<Imagens> retornaImagens (){
         return null;
     }
@@ -37,13 +37,13 @@ public class ImagemResource {
 
     @PutMapping ("/{codigo}")
     public ResponseEntity atualizaImagemInfo (@PathVariable Long codigo, @RequestBody Imagens imagens) {
-        return null;
+        return service.atualizarImagemInfos(codigo, imagens);
     }
 
     @PutMapping("/{codigo}/imagem")
-    public ResponseEntity atualizaImagem( @RequestParam MultipartFile file,
-                                HttpServletResponse response) throws IOException {
-        return  service.atualizarSalvarImagem(file);
+    public ResponseEntity atualizaImagem(@PathVariable Long codigo,
+                                         @RequestParam MultipartFile file) throws IOException {
+        return  service.atualizarSalvarImagem(file, codigo);
     }
 
 
