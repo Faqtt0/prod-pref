@@ -43,9 +43,10 @@ public class ImagemRepositoryPersonImpl implements ImagemRepositoryPerson {
         StringBuilder sbSql = new StringBuilder("SELECT * FROM IMAGENS ");
         MapSqlParameterSource params = new MapSqlParameterSource();
         if (filter.getAlteracao() != null){
-            sbSql.append("WHERE ULTALT >= :ULTALT");
+            sbSql.append("WHERE ULTALT >= :ULTALT ");
             params.addValue("ULTALT", LocalDateTime.parse(filter.getAlteracao()));
         }
+        sbSql.append("ORDER BY ULTALT");
 
         return template.query(sbSql.toString(), params, new BeanPropertyRowMapper<>(Imagens.class));
     }

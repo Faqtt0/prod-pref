@@ -9,4 +9,5 @@
     <include file="classpath:db/changelog/02-insert-perguntas-respostas.xml"/>
     <include file="classpath:db/changelog/03-criar-segmentos-e-empresas.xml"/>
     <include file="classpath:db/changelog/04-criar-imagens-e-historicas.xml"/>
+    <include file="classpath:db/changelog/05-criar-agenda.xml"/>
 </databaseChangeLog>
