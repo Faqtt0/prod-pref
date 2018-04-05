@@ -14,6 +14,7 @@ import javax.persistence.Convert;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Base64;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class ImagemResource {
 
     @PutMapping("/{codigo}/imagem")
     public ResponseEntity atualizaImagem(@PathVariable Long codigo,
-                                         @RequestParam MultipartFile file) throws IOException {
+                                         @RequestParam MultipartFile file) throws IOException, InvocationTargetException, IllegalAccessException {
         return service.atualizarSalvarImagem(file, codigo);
     }
 

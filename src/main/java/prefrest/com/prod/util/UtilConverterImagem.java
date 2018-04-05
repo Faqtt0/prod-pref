@@ -1,8 +1,12 @@
 package prefrest.com.prod.util;
 
 import liquibase.util.file.FilenameUtils;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import prefrest.com.prod.constants.Constants;
+import prefrest.com.prod.model.Imagens;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -16,8 +20,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class UtilConverterImagem {
+public class UtilConverterImagem{
     private static BufferedImage bufferedImage;
+
+
+
 
     public static long tamanhoImagem(@RequestParam MultipartFile file) {
         return file.getSize() / (1024 * 1024);

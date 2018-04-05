@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import prefrest.com.prod.constants.Constants;
 import prefrest.com.prod.event.RecursoEvent;
 import prefrest.com.prod.model.Imagens;
+import prefrest.com.prod.repository.ImagemCommonRepository;
 import prefrest.com.prod.repository.ImagemRepository;
 import prefrest.com.prod.repository.ImagemRepositoryPerson;
 import prefrest.com.prod.repository.filter.ImagensFilter;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,6 +32,8 @@ public class ImagemService {
     ImagemRepository imagemRepository;
     @Autowired
     ImagemRepositoryPerson imagemRepositoryPerson;
+    @Autowired
+    ImagemCommonRepository imagemCommonRepository;
 
     private BufferedImage bufferedImage;
 
@@ -41,28 +45,31 @@ public class ImagemService {
         return ResponseEntity.status(HttpStatus.CREATED).body(imagemSalva);
     }
 
-    public ResponseEntity atualizarSalvarImagem(MultipartFile file, Long codigo) throws IOException {
+    public ResponseEntity atualizarSalvarImagem(MultipartFile file, Long codigo) throws IOException, InvocationTargetException, IllegalAccessException {
         String diretorioImagem;
-        //Transforma o tamanho em MegaBytes de bytes
         Long imgMb = UtilConverterImagem.tamanhoImagem(file);
         //Criar um diretório acima a pasta imagens
         if (UtilConverterImagem.isDiretorioCriado(Constants.DIRETORIO_IMAGENS)) {
             if (FilenameUtils.getExtension(file.getOriginalFilename()).equals("png")) {
                 diretorioImagem = UtilConverterImagem.converteImagemPngToJpg(file, Constants.DIRETORIO_IMAGENS);
             } else {
-                //Se for maior que 2MB vai fazer uma compressão de cores para diminuir o tamanho.
                 if (imgMb > 2) {
                     UtilConverterImagem.compressImagemColors(file, Constants.DIRETORIO_IMAGENS);
                 } else {
                     UtilConverterImagem.salvaImagemJpg(file, Constants.DIRETORIO_IMAGENS );
-
                 }
                 diretorioImagem = Constants.DIRETORIO_IMAGENS + "\\" + file.getOriginalFilename();
             }
 
             if (diretorioImagem != null) {
                 Imagens imagemSalva = imagemRepository.findOne(codigo);
-                boolean isAtualizado = imagemRepositoryPerson.updateImagem(diretorioImagem, imagemSalva);
+                boolean isAtualizado = false;
+                if (imagemSalva != null) {
+                     isAtualizado = imagemCommonRepository.updateImagem(diretorioImagem, imagemSalva);
+                } else {
+                    return ResponseEntity.badRequest().build();
+                }
+
                 if (isAtualizado) {
                     return ResponseEntity.noContent().build();
                 } else {
