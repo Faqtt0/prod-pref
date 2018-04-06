@@ -1,12 +1,11 @@
 package prefrest.com.prod.util;
 
+
 import liquibase.util.file.FilenameUtils;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import prefrest.com.prod.constants.Constants;
-import prefrest.com.prod.model.Imagens;
+import prefrest.com.prod.repository.ImagemCommonRepository;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -16,17 +15,70 @@ import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UtilConverterImagem{
     private static BufferedImage bufferedImage;
 
+    public static ResponseEntity atualizarSalvarImagem(MultipartFile file, String caminho, Object classe, ImagemCommonRepository commonRepository) {
+        String diretorioImagem;
+        Long imgMb = tamanhoImagem(file);
+        //Criar um diretório acima a pasta imagens
+        if (isDiretorioCriado(caminho)) {
+            if (FilenameUtils.getExtension(file.getOriginalFilename()).equals("png")) {
+                diretorioImagem = converteImagemPngToJpg(file, caminho);
+            } else {
+                if (imgMb > 2) {
+                    try {
+                        compressImagemColors(file, caminho);
+                    } catch (IOException e) {
+                        e.getMessage();
+                    }
+                } else {
+                    try {
+                        salvaImagemJpg(file, caminho);
+                    } catch (IOException e) {
+                        e.getMessage();
+                    }
+                }
+                diretorioImagem = caminho + "\\" + file.getOriginalFilename();
+            }
+
+            if (diretorioImagem != null) {
+
+                boolean isAtualizado = false;
+                if (classe != null) {
+                    try {
+                        isAtualizado = commonRepository.updateImagem(diretorioImagem, classe);
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    return ResponseEntity.badRequest().build();
+                }
+
+                if (isAtualizado) {
+                    return ResponseEntity.noContent().build();
+                } else {
+                    return ResponseEntity.badRequest().build();
+                }
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
 
-
-    public static long tamanhoImagem(@RequestParam MultipartFile file) {
+    public static long tamanhoImagem(MultipartFile file) {
         return file.getSize() / (1024 * 1024);
     }
 
@@ -95,4 +147,13 @@ public class UtilConverterImagem{
         Path path = Paths.get(diretorio + "\\" + file.getOriginalFilename());
         Files.write(path, bytes);
     }
+
+    private List<String> getLista (){
+        List<String> classes = new ArrayList<>();
+        classes.add("Imagens");
+        classes.add("Imagens");
+        classes.add("Imagens");
+        return null;
+    }
+
 }

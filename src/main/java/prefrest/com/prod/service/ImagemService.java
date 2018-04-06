@@ -35,8 +35,6 @@ public class ImagemService {
     @Autowired
     ImagemCommonRepository imagemCommonRepository;
 
-    private BufferedImage bufferedImage;
-
 
     public ResponseEntity<Imagens> salvarImagem(Imagens imagem, HttpServletResponse response, ApplicationEventPublisher publisher) {
         imagem.setUltAlt(LocalDateTime.now());
@@ -45,42 +43,9 @@ public class ImagemService {
         return ResponseEntity.status(HttpStatus.CREATED).body(imagemSalva);
     }
 
-    public ResponseEntity atualizarSalvarImagem(MultipartFile file, Long codigo) throws IOException, InvocationTargetException, IllegalAccessException {
-        String diretorioImagem;
-        Long imgMb = UtilConverterImagem.tamanhoImagem(file);
-        //Criar um diretório acima a pasta imagens
-        if (UtilConverterImagem.isDiretorioCriado(Constants.DIRETORIO_IMAGENS)) {
-            if (FilenameUtils.getExtension(file.getOriginalFilename()).equals("png")) {
-                diretorioImagem = UtilConverterImagem.converteImagemPngToJpg(file, Constants.DIRETORIO_IMAGENS);
-            } else {
-                if (imgMb > 2) {
-                    UtilConverterImagem.compressImagemColors(file, Constants.DIRETORIO_IMAGENS);
-                } else {
-                    UtilConverterImagem.salvaImagemJpg(file, Constants.DIRETORIO_IMAGENS );
-                }
-                diretorioImagem = Constants.DIRETORIO_IMAGENS + "\\" + file.getOriginalFilename();
-            }
-
-            if (diretorioImagem != null) {
-                Imagens imagemSalva = imagemRepository.findOne(codigo);
-                boolean isAtualizado = false;
-                if (imagemSalva != null) {
-                     isAtualizado = imagemCommonRepository.updateImagem(diretorioImagem, imagemSalva);
-                } else {
-                    return ResponseEntity.badRequest().build();
-                }
-
-                if (isAtualizado) {
-                    return ResponseEntity.noContent().build();
-                } else {
-                    return ResponseEntity.badRequest().build();
-                }
-            } else {
-                return ResponseEntity.badRequest().build();
-            }
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity atualizarSalvarImagem(MultipartFile file, Long codigo){
+        Imagens imagemSalva = imagemRepository.findOne(codigo);
+        return UtilConverterImagem.atualizarSalvarImagem(file, Constants.DIRETORIO_IMAGENS, imagemSalva, imagemCommonRepository);
     }
 
     public ResponseEntity atualizarImagemInfos(Long codigo, Imagens imagens) {

@@ -9,6 +9,7 @@ import prefrest.com.prod.model.Imagens;
 import prefrest.com.prod.repository.ImagemRepositoryPerson;
 import prefrest.com.prod.repository.filter.ImagensFilter;
 
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class ImagemRepositoryPersonImpl implements ImagemRepositoryPerson {
     @Autowired
     NamedParameterJdbcTemplate template;
 
-    @Override
+    @Deprecated
     public boolean updateImagem(String caminhoImagem, Imagens imagem) {
         String sql =  "UPDATE IMAGENS SET IMAGEM = :IMAGEM, ULTALT = :ULTALT WHERE ID = :ID";
         imagem.setUltAlt(LocalDateTime.now());
@@ -50,4 +51,5 @@ public class ImagemRepositoryPersonImpl implements ImagemRepositoryPerson {
 
         return template.query(sbSql.toString(), params, new BeanPropertyRowMapper<>(Imagens.class));
     }
+
 }

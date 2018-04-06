@@ -6,6 +6,7 @@ import prefrest.com.prod.repository.filter.ImagensFilter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-public interface ImagemCommonRepository {
+public interface ImagemCommonRepository{
     boolean updateImagem(String caminhoImagem, Object imagem) throws InvocationTargetException, IllegalAccessException;
+    List<?> getImagens (ImagensFilter filter, Object clazz);
 }
