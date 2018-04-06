@@ -11,10 +11,11 @@ public class UtilBase64Image {
     public static String encoder(String imagem) {
         File file = new File(imagem);
         try (FileInputStream imageInFile = new FileInputStream(file)) {
-            // Reading a Image file from file system
+            // Ler imagem
             String base64Image = "";
             byte imageData[] = new byte[(int) file.length()];
             imageInFile.read(imageData);
+            //Codificar Imagem
             base64Image = Base64.getEncoder().encodeToString(imageData);
             return base64Image;
         } catch (FileNotFoundException e) {

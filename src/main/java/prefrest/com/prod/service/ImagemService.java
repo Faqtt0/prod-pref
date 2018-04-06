@@ -1,6 +1,5 @@
 package prefrest.com.prod.service;
 
-import liquibase.util.file.FilenameUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -19,10 +18,6 @@ import prefrest.com.prod.util.UtilBase64Image;
 import prefrest.com.prod.util.UtilConverterImagem;
 
 import javax.servlet.http.HttpServletResponse;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -56,7 +51,6 @@ public class ImagemService {
         } else {
             return ResponseEntity.badRequest().build();
         }
-
     }
 
     public ResponseEntity<List<Imagens>> getImagens(ImagensFilter filter) {
@@ -66,7 +60,6 @@ public class ImagemService {
                 if (item.getImagem() != null){
                     item.setImagemBase64(UtilBase64Image.encoder(item.getImagem()));
                 }
-
             });
         }
         return ResponseEntity.ok().body(imagens);
@@ -74,8 +67,7 @@ public class ImagemService {
 
     public void deletarImagem(Long codigo)  {
         Imagens imagemSalva = imagemRepository.findOne(codigo);
-        File imagem = new File(imagemSalva.getImagem());
-        imagem.delete();
+        UtilConverterImagem.deletarImagemHD(imagemSalva.getImagem());
         imagemRepository.delete(codigo);
     }
 }

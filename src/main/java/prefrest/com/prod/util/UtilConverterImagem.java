@@ -5,6 +5,7 @@ import liquibase.util.file.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
+import prefrest.com.prod.model.Imagens;
 import prefrest.com.prod.repository.ImagemCommonRepository;
 
 import javax.imageio.IIOImage;
@@ -148,12 +149,9 @@ public class UtilConverterImagem{
         Files.write(path, bytes);
     }
 
-    private List<String> getLista (){
-        List<String> classes = new ArrayList<>();
-        classes.add("Imagens");
-        classes.add("Imagens");
-        classes.add("Imagens");
-        return null;
+    public static void deletarImagemHD(String diretorioImagemSalva) {
+        File imagem = new File(diretorioImagemSalva);
+        imagem.delete();
     }
 
 }
