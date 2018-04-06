@@ -9,12 +9,8 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "AGENDA")
 @Data
 public class Agenda {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull
@@ -22,22 +18,21 @@ public class Agenda {
     private String descricao;
 
     @NotNull
-    @Column(name = "DATAINI")
     private LocalDate dataIni;
 
     @NotNull
-    @Column(name = "DATAFIM")
     private LocalDate dataFim;
 
-    private String imagem;
+    private Long codImagem;
 
     @Transient
     private String ImagemBase64;
 
     @JsonIgnore
-    @Column(name = "ULTALT")
     private LocalDateTime ultAlt;
 
     @NotNull
     private boolean deletarAutomaticamente;
+
+    //TODO criar configurações para agenda
 }

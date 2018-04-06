@@ -39,7 +39,7 @@ public class ImagemRepositoryPersonImpl implements ImagemRepositoryPerson {
         return template.update(sql, params) > 0;
     }
 
-    @Override
+    @Deprecated
     public List<Imagens> getImagens(ImagensFilter filter) {
         StringBuilder sbSql = new StringBuilder("SELECT * FROM IMAGENS ");
         MapSqlParameterSource params = new MapSqlParameterSource();

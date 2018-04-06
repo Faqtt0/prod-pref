@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/imagens")
-public class ImagemResource {
+public class ImagemOldResource {
 
     @Autowired
     ImagemService service;
@@ -56,4 +56,5 @@ public class ImagemResource {
         service.deletarImagem(codigo);
     }
 
+    //TODO RETIRAR REST REPOSITORY DEPOIS DE COMPLETAR AS OUTRAS CLASSES PARA O NOVO PADRÃO
 }

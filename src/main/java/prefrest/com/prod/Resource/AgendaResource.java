@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import prefrest.com.prod.model.Agenda;
+import prefrest.com.prod.repository.filter.ImagensFilter;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
 public class AgendaResource {
 
     @GetMapping()
-    public ResponseEntity<List<Agenda>> getCompromissosAgenda() {
+    public ResponseEntity<List<Agenda>> getCompromissosAgenda(ImagensFilter filter) {
         //TODO Recuperar Lista de Compromissos Agenda
         return null;
     }

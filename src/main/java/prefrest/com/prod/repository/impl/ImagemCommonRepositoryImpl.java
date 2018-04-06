@@ -5,9 +5,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
-import prefrest.com.prod.model.Agenda;
-import prefrest.com.prod.model.Imagens;
-import prefrest.com.prod.model.ImagensHistoricas;
 import prefrest.com.prod.repository.ImagemCommonRepository;
 import prefrest.com.prod.repository.filter.ImagensFilter;
 
@@ -16,12 +13,11 @@ import javax.persistence.Table;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 
 @Service
-public class ImagemCommonRepositoryImpl<T> implements ImagemCommonRepository {
+public class ImagemCommonRepositoryImpl <T> implements ImagemCommonRepository {
     @Autowired
     NamedParameterJdbcTemplate template;
     private StringBuilder sbSql;
@@ -52,6 +48,27 @@ public class ImagemCommonRepositoryImpl<T> implements ImagemCommonRepository {
         return false;
     }
 
+
+    @Override
+    public List getImagens(ImagensFilter filter, Class<?> clazz) {
+        StringBuilder sbSql = new StringBuilder("SELECT * FROM ");
+        if (isEntity(clazz)){
+            Table table = getTable(clazz);
+            sbSql.append(table.name());
+        } else {
+            sbSql.append(clazz.getSimpleName());
+        }
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        if (filter.getAlteracao() != null){
+            sbSql.append(" WHERE ULTALT >= :ULTALT ");
+            params.addValue("ULTALT", LocalDateTime.parse(filter.getAlteracao()));
+        }
+        sbSql.append("ORDER BY ULTALT");
+
+        return template.query(sbSql.toString(), params, new BeanPropertyRowMapper<>(clazz));
+    }
+
     private Table getTable(Class imagem) {
         return (Table) imagem.getAnnotation(Table.class);
     }
@@ -59,26 +76,5 @@ public class ImagemCommonRepositoryImpl<T> implements ImagemCommonRepository {
     private boolean isEntity(Class imagem) {
         return imagem.getAnnotation(Entity.class) != null;
     }
-
-    @Override
-    public List<T> getImagens(ImagensFilter filter, Object clazz) {
-        StringBuilder sbSql = new StringBuilder("SELECT * FROM ");
-        if (isEntity(clazz.getClass())){
-            Table table = getTable(clazz.getClass());
-            sbSql.append(table.name());
-        } else {
-            sbSql.append(clazz.getClass().getSimpleName());
-        }
-
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        if (filter.getAlteracao() != null){
-            sbSql.append("WHERE ULTALT >= :ULTALT ");
-            params.addValue("ULTALT", LocalDateTime.parse(filter.getAlteracao()));
-        }
-        sbSql.append("ORDER BY ULTALT");
-
-        return template.query(sbSql.toString(), params, new BeanPropertyRowMapper<>());
-    }
-
 
 }

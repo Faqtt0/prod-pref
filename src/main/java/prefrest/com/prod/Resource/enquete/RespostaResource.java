@@ -1,4 +1,4 @@
-package prefrest.com.prod.Resource;
+package prefrest.com.prod.Resource.enquete;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;

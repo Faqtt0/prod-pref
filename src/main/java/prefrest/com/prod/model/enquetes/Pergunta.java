@@ -19,11 +19,6 @@ public class Pergunta {
     @Id
     private Long codigo;
 
-    /*@Id
-    @ManyToOne
-    @JoinColumn(name = "CODENQUETE")
-    private Enquete enquete;*/
-
     @Id
     @NotNull
     @Column(name = "CODENQUETE")

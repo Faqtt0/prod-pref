@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+
+    <changeSet id="1" author="Fagner" failOnError="true">
+        <comment>TABELA IMAGEM</comment>
+        <createTable tableName="IMAGEM">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+
+            <column name="CAMINHO" type="BLOB">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <modifySql dbms="mysql">
+            <append value="ENGINE=INNODB CHARSET=UTF8 "/>
+        </modifySql>
+    </changeSet>
+
+    <changeSet id="2" author="Fagner" failOnError="true">
+        <comment>TABELA FOLDER</comment>
+        <createTable tableName="FOLDER">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+
+            <column name="DESCRICAO" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="ORDEM" type="INTEGER" />
+            
+            <column name="CODIMAGEM" type="BIGINT">
+                <constraints foreignKeyName="FK_FOLDER_IMAGEM"
+                             references="IMAGEM(ID)"/>
+            </column>
+
+            <column name="ULTALT" type="TIMESTAMP"/>
+        </createTable>
+
+        <modifySql dbms="mysql">
+            <append value="ENGINE=INNODB CHARSET=UTF8 "/>
+        </modifySql>
+    </changeSet>
+    
+    <changeSet id="3" author="Fagner">
+        <comment>TABELA AGENDA</comment>
+        <createTable tableName="AGENDA">
+            <column name="ID" type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"/>
+            </column>
+
+            <column name="DESCRICAO" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="DATAINI" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="DATAFIM" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="CODIMAGEM" type="BIGINT">
+                <constraints foreignKeyName="FK_AGENDA_IMAGEM"
+                             references="IMAGEM(ID)"/>
+            </column>
+
+            <column name="ULTALT" type="TIMESTAMP"/>
+        </createTable>
+
+        <modifySql dbms="mysql">
+            <append value="ENGINE=INNODB CHARSET=UTF8 "/>
+        </modifySql>
+    </changeSet>
+
+    <changeSet id="4" author="Fagner">
+        <comment>Tabela FOLDERHISTORICO</comment>
+        <createTable tableName="FOLDERHISTORICO">
+            <column name="ID" type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"/>
+            </column>
+
+            <column name="DESCRICAO" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="CODIMAGEM" type="BIGINT">
+                <constraints foreignKeyName="FK_FOLDERHISTORICO_IMAGEM"
+                             references="IMAGEM(ID)"/>
+            </column>
+        </createTable>
+    </changeSet>
+    
+</databaseChangeLog>

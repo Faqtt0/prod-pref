@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import prefrest.com.prod.constants.Constants;
 import prefrest.com.prod.event.RecursoEvent;
+import prefrest.com.prod.exception.ImagemNaoEncontradaException;
 import prefrest.com.prod.model.Imagens;
 import prefrest.com.prod.repository.ImagemCommonRepository;
 import prefrest.com.prod.repository.ImagemRepository;
@@ -54,7 +55,9 @@ public class ImagemService {
     }
 
     public ResponseEntity<List<Imagens>> getImagens(ImagensFilter filter) {
-        List<Imagens> imagens = imagemRepositoryPerson.getImagens(filter);
+        List<Imagens> imagens = (List<Imagens>) imagemCommonRepository.getImagens(filter, Imagens.class);
+
+        //List<Imagens> imagens = imagemRepositoryPerson.getImagens(filter);
         if (imagens.size() > 0) {
             imagens.forEach(item -> {
                 if (item.getImagem() != null){
@@ -67,7 +70,12 @@ public class ImagemService {
 
     public void deletarImagem(Long codigo)  {
         Imagens imagemSalva = imagemRepository.findOne(codigo);
-        UtilConverterImagem.deletarImagemHD(imagemSalva.getImagem());
-        imagemRepository.delete(codigo);
+        if (imagemSalva != null){
+            UtilConverterImagem.deletarImagemHD(imagemSalva.getImagem());
+            imagemRepository.delete(codigo);
+        } else {
+            throw new ImagemNaoEncontradaException();
+        }
+
     }
 }
