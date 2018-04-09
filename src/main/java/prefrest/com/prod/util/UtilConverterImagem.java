@@ -2,11 +2,9 @@ package prefrest.com.prod.util;
 
 
 import liquibase.util.file.FilenameUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
-import prefrest.com.prod.model.Imagens;
-import prefrest.com.prod.repository.ImagemCommonRepository;
+import prefrest.com.prod.repository.ImagemCommonOldRepository;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -20,13 +18,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UtilConverterImagem{
     private static BufferedImage bufferedImage;
 
-    public static ResponseEntity atualizarSalvarImagem(MultipartFile file, String caminho, Object classe, ImagemCommonRepository commonRepository) {
+    public static ResponseEntity atualizarSalvarImagem(MultipartFile file, String caminho, Object classe, ImagemCommonOldRepository commonRepository) {
         String diretorioImagem;
         Long imgMb = tamanhoImagem(file);
         //Criar um diretório acima a pasta imagens

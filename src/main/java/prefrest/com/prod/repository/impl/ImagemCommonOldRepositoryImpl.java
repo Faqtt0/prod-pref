@@ -5,7 +5,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
-import prefrest.com.prod.repository.ImagemCommonRepository;
+import prefrest.com.prod.repository.ImagemCommonOldRepository;
 import prefrest.com.prod.repository.filter.ImagensFilter;
 
 import javax.persistence.Entity;
@@ -17,7 +17,7 @@ import java.util.List;
 
 
 @Service
-public class ImagemCommonRepositoryImpl <T> implements ImagemCommonRepository {
+public class ImagemCommonOldRepositoryImpl<T> implements ImagemCommonOldRepository {
     @Autowired
     NamedParameterJdbcTemplate template;
     private StringBuilder sbSql;

@@ -8,14 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import prefrest.com.prod.model.Imagens;
 import prefrest.com.prod.repository.filter.ImagensFilter;
-import prefrest.com.prod.service.ImagemService;
+import prefrest.com.prod.service.ImagemOldService;
 
-import javax.persistence.Convert;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Base64;
 import java.util.List;
 
 @RestController
@@ -23,7 +21,7 @@ import java.util.List;
 public class ImagemOldResource {
 
     @Autowired
-    ImagemService service;
+    ImagemOldService service;
 
     @Autowired
     ApplicationEventPublisher publisher;
