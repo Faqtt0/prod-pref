@@ -63,6 +63,8 @@ public class UtilConverterImagem{
                         requestCodImage.put("codImagem", imagem.getId());
                         isAtualizado = true;
                     } else {
+                        Imagem imagemDeletar = imagemRepository.findById(codImagem);
+                        deletarImagemHD(imagemDeletar.getCaminho());
                         isAtualizado = imagemRepository.updateImagem(new Imagem(codImagem, diretorioImagem, null));
 
                         if (isAtualizado) {
