@@ -17,9 +17,10 @@ import java.util.List;
 
 
 @Service
-public class ImagemCommonOldRepositoryImpl<T> implements ImagemCommonOldRepository {
+public class ImagemCommonOldRepositoryImpl implements ImagemCommonOldRepository {
     @Autowired
     NamedParameterJdbcTemplate template;
+
     private StringBuilder sbSql;
 
     @Override

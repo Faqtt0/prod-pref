@@ -1,26 +1,10 @@
 package prefrest.com.prod.service;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import prefrest.com.prod.constants.Constants;
-import prefrest.com.prod.event.RecursoEvent;
-import prefrest.com.prod.exception.ImagemNaoEncontradaException;
-import prefrest.com.prod.model.Imagens;
 import prefrest.com.prod.repository.ImagemCommonOldRepository;
 import prefrest.com.prod.repository.ImagemRepository;
 import prefrest.com.prod.repository.ImagemRepositoryPerson;
-import prefrest.com.prod.repository.filter.ImagensFilter;
-import prefrest.com.prod.util.UtilBase64Image;
-import prefrest.com.prod.util.UtilConverterImagem;
-
-import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class ImagemOldService {
@@ -31,7 +15,7 @@ public class ImagemOldService {
     @Autowired
     ImagemCommonOldRepository imagemCommonOldRepository;
 
-
+    /*
     public ResponseEntity<Imagens> salvarImagem(Imagens imagem, HttpServletResponse response, ApplicationEventPublisher publisher) {
         imagem.setUltAlt(LocalDateTime.now());
         Imagens imagemSalva = imagemRepository.save(imagem);
@@ -77,5 +61,5 @@ public class ImagemOldService {
             throw new ImagemNaoEncontradaException();
         }
 
-    }
+    }*/
 }

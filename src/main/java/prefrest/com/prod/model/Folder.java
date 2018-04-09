@@ -1,5 +1,6 @@
 package prefrest.com.prod.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -18,16 +19,15 @@ public class Folder {
 
     @NotNull
     @Size(min = 3, max = 200)
-    private Long descricao;
+    private String descricao;
 
     @NotNull
     private Integer ordem;
 
-    @Transient
+    @JsonIgnore
     @Column(name = "CODIMAGEM")
     private Long codImagem;
 
-    @Transient
     @Column(name = "ULTALT")
     private LocalDateTime ultAlt;
 

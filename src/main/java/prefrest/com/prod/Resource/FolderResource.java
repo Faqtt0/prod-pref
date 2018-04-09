@@ -40,7 +40,7 @@ public class FolderResource {
         return service.atualizarFolder(codigo, folder);
     }
 
-    @PutMapping("/{codigo}/imagem/")
+    @PutMapping("/{codigo}/imagem")
     public ResponseEntity atualizarSalvarImagem(@PathVariable Long codigo,
                                                 @RequestPart MultipartFile file){
         return service.atualizarSalvarImagem(codigo, file);

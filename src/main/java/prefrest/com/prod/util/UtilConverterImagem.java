@@ -2,9 +2,10 @@ package prefrest.com.prod.util;
 
 
 import liquibase.util.file.FilenameUtils;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.MultipartFile;
-import prefrest.com.prod.repository.ImagemCommonOldRepository;
+import prefrest.com.prod.model.Imagem;
+import prefrest.com.prod.repository.ImagemRepository;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -14,16 +15,23 @@ import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UtilConverterImagem{
     private static BufferedImage bufferedImage;
 
-    public static ResponseEntity atualizarSalvarImagem(MultipartFile file, String caminho, Object classe, ImagemCommonOldRepository commonRepository) {
+    public static Map<String, Object> atualizarSalvarImagem(MultipartFile file, String caminho, Object classe, Long codImagem, ImagemRepository imagemRepository) {
         String diretorioImagem;
+
+        Integer noContent =  HttpStatus.NO_CONTENT.value();
+        Integer badRequest =  HttpStatus.BAD_REQUEST.value();
+
+        Map<String, Object> requestCodImage= new HashMap<>();
+
         Long imgMb = tamanhoImagem(file);
         //Criar um diretório acima a pasta imagens
         if (isDiretorioCriado(caminho)) {
@@ -50,27 +58,39 @@ public class UtilConverterImagem{
 
                 boolean isAtualizado = false;
                 if (classe != null) {
-                    try {
-                        isAtualizado = commonRepository.updateImagem(diretorioImagem, classe);
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
+                    if (codImagem == null){
+                        Imagem imagem = imagemRepository.insertImagem(diretorioImagem);
+                        requestCodImage.put("codImagem", imagem.getId());
+                        isAtualizado = true;
+                    } else {
+                        isAtualizado = imagemRepository.updateImagem(new Imagem(codImagem, diretorioImagem, null));
+
+                        if (isAtualizado) {
+                            requestCodImage.put("status", HttpStatus.NO_CONTENT.value());
+                        } else {
+                            requestCodImage.put("status", HttpStatus.BAD_REQUEST.value());
+                        }
                     }
+
                 } else {
-                    return ResponseEntity.badRequest().build();
+                    requestCodImage.put("status", badRequest);
+                    return  requestCodImage;
                 }
 
                 if (isAtualizado) {
-                    return ResponseEntity.noContent().build();
+                    requestCodImage.put("status", noContent);
+                    return requestCodImage;
                 } else {
-                    return ResponseEntity.badRequest().build();
+                    requestCodImage.put("status", HttpStatus.BAD_REQUEST.value());
+                    return requestCodImage;
                 }
             } else {
-                return ResponseEntity.badRequest().build();
+                requestCodImage.put("status", HttpStatus.BAD_REQUEST.value());
+                return requestCodImage;
             }
         } else {
-            return ResponseEntity.badRequest().build();
+            requestCodImage.put("status", HttpStatus.BAD_REQUEST.value());
+            return  requestCodImage;
         }
     }
 

@@ -5,8 +5,8 @@ import prefrest.com.prod.model.Imagem;
 import prefrest.com.prod.model.Imagens;
 
 public interface ImagemRepository{
-    Long maxIdIncrement();
-    Imagem findByImagem(Imagem imagem);
+    Imagem findByDiretorio(String diretorio);
+    Imagem findById(Long id);
     boolean updateImagem(Imagem imagem);
     Imagem insertImagem(String caminho);
     boolean deleteById(Long codigo);
