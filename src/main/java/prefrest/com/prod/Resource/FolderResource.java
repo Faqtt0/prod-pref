@@ -48,8 +48,7 @@ public class FolderResource {
 
     @DeleteMapping("/{codigo}")
     public ResponseEntity deletarImagem(@PathVariable Long codigo){
-        //TODO DELETAR FOLDER  E IMAGEM
-        return null;
+        return service.deletarImagem(codigo);
     }
 
 }

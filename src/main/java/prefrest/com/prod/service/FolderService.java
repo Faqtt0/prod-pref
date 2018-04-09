@@ -60,4 +60,10 @@ public class FolderService {
 
         return ResponseEntity.status((Integer) imagem.get("status")).build();
     }
+
+    public ResponseEntity deletarImagem(Long codigo) {
+        Folder folderSalvo = folderRespository.findOne(codigo);
+        imagemRepository.deleteById(folderSalvo.getCodImagem());
+        return null;
+    }
 }

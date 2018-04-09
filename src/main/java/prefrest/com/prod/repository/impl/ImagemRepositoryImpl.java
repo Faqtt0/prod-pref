@@ -56,6 +56,8 @@ public class ImagemRepositoryImpl implements ImagemRepository {
 
     @Override
     public boolean deleteById(Long codigo) {
-        return false;
+        String sql = "DELETE FROM IMAGEM WHERE ID = :ID";
+        MapSqlParameterSource params = new MapSqlParameterSource().addValue("ID", codigo);
+        return template.update(sql, params) > 0;
     }
 }
