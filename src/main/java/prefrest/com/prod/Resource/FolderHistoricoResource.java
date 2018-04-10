@@ -1,10 +1,53 @@
 package prefrest.com.prod.Resource;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import prefrest.com.prod.model.FolderHistorico;
+import prefrest.com.prod.repository.filter.FiltroPadrao;
+import prefrest.com.prod.service.FolderHistoricoService;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
-@RequestMapping("/folder-hist")
+@RequestMapping("/folderhist")
 public class FolderHistoricoResource {
+
+    @Autowired
+    ApplicationEventPublisher publisher;
+
+    @Autowired
+    FolderHistoricoService service;
+
+    @GetMapping()
+    public ResponseEntity<List<FolderHistorico>> retornaFoldersHist(FiltroPadrao filtroPadrao){
+        return service.buscaFolderHistor(filtroPadrao);
+    }
+
+    @PostMapping()
+    public ResponseEntity<FolderHistorico> salvaFolderHist(@Valid @RequestBody FolderHistorico folder, HttpServletResponse response){
+        return service.salvarFolder(folder, response, publisher) ;
+    }
+
+    @PutMapping("/{codigo}")
+    public ResponseEntity atualizarIFolderInfosHist(@PathVariable Long codigo,
+                                                @Valid @RequestBody FolderHistorico folder){
+        return service.atualizarFolder(codigo, folder);
+    }
+
+    @PutMapping("/{codigo}/imagem")
+    public ResponseEntity atualizarSalvarImagemHist(@PathVariable Long codigo,
+                                                @RequestPart MultipartFile file){
+        return service.atualizarSalvarImagem(codigo, file);
+    }
+
+    @DeleteMapping("/{codigo}")
+    public ResponseEntity deletarImagemHist(@PathVariable Long codigo){
+        return service.deletarImagem(codigo);
+    }
 
 }

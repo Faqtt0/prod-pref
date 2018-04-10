@@ -1,5 +1,7 @@
 package prefrest.com.prod.repository;
 
+import prefrest.com.prod.repository.filter.FiltroPadrao;
+
 import java.util.List;
 
 public interface ImagemCommomRepository {

@@ -38,6 +38,7 @@ public class EnqueteResource {
 
     @GetMapping()
     public List<Enquete> retornaEnquetes(EnqueteFilter filtro) {
+        //TODO ENQUETE ajustar para receber ultalt
         return repository.filtrarEnquetes(filtro);
     }
 
@@ -65,6 +66,7 @@ public class EnqueteResource {
 
     @DeleteMapping("/{codigo}")
     public ResponseEntity remover (@PathVariable Long codigo) {
+        //TODO ENQUETE AJUSTAR PARA SALVAR DELETE EM UMA TABELA AUXILIAR
         if (service.deletarEnquete(codigo)){
             return ResponseEntity.noContent().build();
         }

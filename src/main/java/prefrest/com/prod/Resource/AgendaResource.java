@@ -1,46 +1,52 @@
 package prefrest.com.prod.Resource;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import prefrest.com.prod.model.Agenda;
-import prefrest.com.prod.repository.filter.ImagensFilter;
+import prefrest.com.prod.repository.filter.FiltroPadrao;
+import prefrest.com.prod.service.AgendaService;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/agenda")
 public class AgendaResource {
 
+    @Autowired
+    ApplicationEventPublisher publisher;
+
+    @Autowired
+    AgendaService service;
+
     @GetMapping()
-    public ResponseEntity<List<Agenda>> getCompromissosAgenda(ImagensFilter filter) {
-        //TODO Recuperar Lista de Compromissos Agenda
-        return null;
+    public ResponseEntity<List<Agenda>> retornaAgenda(FiltroPadrao filtroPadrao){
+        return service.buscaAgenda(filtroPadrao);
     }
 
     @PostMapping()
-    public ResponseEntity<Agenda> salvaAgenda(@RequestBody Agenda agenda) {
-        //TODO Salvar Agenda
-        return null;
+    public ResponseEntity<Agenda> salvaAgenda(@Valid @RequestBody Agenda agenda, HttpServletResponse response){
+        return service.salvarAgenda(agenda, response, publisher) ;
     }
 
     @PutMapping("/{codigo}")
-    public ResponseEntity salvarAgendaInfos(@PathVariable Long codigo, Agenda agenda) {
-        //TODO Atualizar Infos Cab Agenda
-        return null;
+    public ResponseEntity atualizarAgenda(@PathVariable Long codigo,
+                                                    @Valid @RequestBody Agenda agenda){
+        return service.atualizarAgenda(codigo, agenda);
     }
 
     @PutMapping("/{codigo}/imagem")
-    public ResponseEntity salvaAtualizaImagem(@PathVariable Long codigo,
-                                              @RequestPart MultipartFile file) {
-        //TODO Salvar Atualizar Imagem Agenda
-        return null;
+    public ResponseEntity atualizarSalvarImagemAgenda(@PathVariable Long codigo,
+                                                    @RequestPart MultipartFile file){
+        return service.atualizarSalvarImagem(codigo, file);
     }
 
     @DeleteMapping("/{codigo}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletarAgendaId(@PathVariable Long codigo) {
-        //TODO Deletar Compromisso Agenda
+    public ResponseEntity deletarImagemAgenda(@PathVariable Long codigo){
+        return service.deletarImagem(codigo);
     }
 }

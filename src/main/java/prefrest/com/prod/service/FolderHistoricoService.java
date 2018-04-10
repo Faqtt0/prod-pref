@@ -9,11 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import prefrest.com.prod.constants.Constants;
 import prefrest.com.prod.event.RecursoEvent;
-import prefrest.com.prod.model.DeleteTables;
 import prefrest.com.prod.model.Folder;
+import prefrest.com.prod.model.FolderHistorico;
 import prefrest.com.prod.model.Imagem;
-import prefrest.com.prod.repository.DeleteTablesRepository;
-import prefrest.com.prod.repository.FolderRespository;
+import prefrest.com.prod.repository.FolderHistoricoRespository;
 import prefrest.com.prod.repository.ImagemRepository;
 import prefrest.com.prod.repository.filter.FiltroPadrao;
 import prefrest.com.prod.util.UtilBase64Image;
@@ -26,36 +25,34 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class FolderService {
+public class FolderHistoricoService {
+
     @Autowired
-    FolderRespository folderRespository;
+    FolderHistoricoRespository folderHistoricoRespository;
 
     @Autowired
     ImagemRepository imagemRepository;
 
-    @Autowired
-    DeleteTablesRepository deleteTablesRepository;
-
-    public ResponseEntity<Folder> salvarFolder(Folder folder, HttpServletResponse response, ApplicationEventPublisher publisher) {
+    public ResponseEntity<FolderHistorico> salvarFolder(FolderHistorico folder, HttpServletResponse response, ApplicationEventPublisher publisher) {
         folder.setUltAlt(LocalDateTime.now());
-        Folder folderSalvo = folderRespository.save(folder);
+        FolderHistorico folderSalvo = folderHistoricoRespository.save(folder);
         publisher.publishEvent(new RecursoEvent(this, response, folderSalvo.getId()));
         return ResponseEntity.ok(folderSalvo);
     }
 
-    public ResponseEntity atualizarFolder(Long codigo, Folder folder) {
-        Folder folderSalvo = folderRespository.findOne(codigo);
+    public ResponseEntity atualizarFolder(Long codigo, FolderHistorico folder) {
+        FolderHistorico folderSalvo = folderHistoricoRespository.findOne(codigo);
         BeanUtils.copyProperties(folder, folderSalvo, "id");
         folderSalvo.setUltAlt(LocalDateTime.now());
-        folderRespository.save(folderSalvo);
+        folderHistoricoRespository.save(folderSalvo);
         return ResponseEntity.noContent().build();
     }
 
     public ResponseEntity atualizarSalvarImagem(Long codigo, MultipartFile file) {
-        Folder folderSalvo = folderRespository.findOne(codigo);
+        FolderHistorico folderSalvo = folderHistoricoRespository.findOne(codigo);
 
         Map<String, Object> imagem = UtilConverterImagem.atualizarSalvarImagem(file,
-                Constants.DIRETORIO_IMAGENS,
+                Constants.DIRETORIO_IMAGENS_HIST,
                 Folder.class,
                 folderSalvo.getCodImagem(),
                 imagemRepository
@@ -67,15 +64,14 @@ public class FolderService {
             folderSalvo.setCodImagem((Long) imagem.get("codImagem"));
         }
 
-        folderRespository.save(folderSalvo);
+        folderHistoricoRespository.save(folderSalvo);
 
         return ResponseEntity.status((Integer) imagem.get("status")).build();
     }
 
     public ResponseEntity deletarImagem(Long codigo) {
-        Folder folderSalvo = folderRespository.findOne(codigo);
-        //deleteTablesRepository.save(new DeleteTables());
-        folderRespository.delete(codigo);
+        FolderHistorico folderSalvo = folderHistoricoRespository.findOne(codigo);
+        folderHistoricoRespository.delete(codigo);
         if (folderSalvo.getCodImagem() != null) {
             Imagem imagemSalva = imagemRepository.findById(folderSalvo.getCodImagem());
             UtilConverterImagem.deletarImagemHD(imagemSalva.getCaminho());
@@ -85,17 +81,17 @@ public class FolderService {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    public ResponseEntity<List<Folder>> buscarFolders(FiltroPadrao filtroPadrao) {
-        List<Folder> folders = new ArrayList<>();
+    public ResponseEntity<List<FolderHistorico>> buscaFolderHistor(FiltroPadrao filtroPadrao) {
+        List<FolderHistorico> folders = new ArrayList<>();
         if (filtroPadrao.getAlteracao() != null) {
             LocalDateTime dtUltAlt = LocalDateTime.parse(filtroPadrao.getAlteracao());
-            List<Folder> foldersSalvos = folderRespository.findAllByUltAltAfterOrderByUltAlt(dtUltAlt);
+            List<FolderHistorico> foldersSalvos = folderHistoricoRespository.findAllByUltAltAfterOrderByUltAlt(dtUltAlt);
             foldersSalvos.forEach(folder -> {
                 recuperaImagens(folder);
             });
             return ResponseEntity.ok().body(foldersSalvos);
         } else {
-            folders = folderRespository.findAll();
+            folders = folderHistoricoRespository.findAll();
             folders.forEach(folder -> {
                 recuperaImagens(folder);
             });
@@ -103,7 +99,7 @@ public class FolderService {
         return ResponseEntity.ok().body(folders);
     }
 
-    private void recuperaImagens(Folder folder) {
+    private void recuperaImagens(FolderHistorico folder) {
         if (folder.getCodImagem() != null) {
             folder.setImagem(imagemRepository.findById(folder.getCodImagem()));
             folder.getImagem().setImagemBase64(UtilBase64Image.encoder(folder.getImagem().getCaminho()));

@@ -1,17 +1,13 @@
 package prefrest.com.prod.repository.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import prefrest.com.prod.model.Imagens;
 import prefrest.com.prod.repository.ImagemRepositoryPerson;
-import prefrest.com.prod.repository.filter.ImagensFilter;
 
-import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class ImagemRepositoryPersonImpl implements ImagemRepositoryPerson {
@@ -39,8 +35,9 @@ public class ImagemRepositoryPersonImpl implements ImagemRepositoryPerson {
         return template.update(sql, params) > 0;
     }
 
+    /*
     @Deprecated
-    public List<Imagens> getImagens(ImagensFilter filter) {
+    public List<Imagens> getImagens(FiltroPadrao filter) {
         StringBuilder sbSql = new StringBuilder("SELECT * FROM IMAGENS ");
         MapSqlParameterSource params = new MapSqlParameterSource();
         if (filter.getAlteracao() != null){
@@ -50,6 +47,6 @@ public class ImagemRepositoryPersonImpl implements ImagemRepositoryPerson {
         sbSql.append("ORDER BY ULTALT");
 
         return template.query(sbSql.toString(), params, new BeanPropertyRowMapper<>(Imagens.class));
-    }
+    }*/
 
 }

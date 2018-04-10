@@ -26,14 +26,6 @@ public class RespostaResource {
     @Autowired
     ApplicationEventPublisher publisher;
 
-    @DeleteMapping("/{codigo}")
-    public ResponseEntity removerResposta(@PathVariable Long codigo) {
-        if (service.removerResposta(codigo)){
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.badRequest().build();
-    }
-
     @PostMapping()
     public ResponseEntity<Resposta> salvarResposta(@Valid @RequestBody Resposta resposta, HttpServletResponse response) {
         return service.salvarResposta(resposta, response, publisher);
@@ -45,6 +37,14 @@ public class RespostaResource {
         return service.atualizarResposta(codigo, resposta);
     }
 
+    @DeleteMapping("/{codigo}")
+    public ResponseEntity removerResposta(@PathVariable Long codigo) {
+        //TODO RESPOSTAS ajustar para salvar o delete em uma tabela auxiliar
+        if (service.removerResposta(codigo)){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.badRequest().build();
+    }
 
 
 }

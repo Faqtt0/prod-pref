@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import prefrest.com.prod.repository.ImagemCommomRepository;
+import prefrest.com.prod.repository.filter.FiltroPadrao;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -53,4 +54,6 @@ public class ImagemCommomRepositoryImpl implements ImagemCommomRepository {
     private Table getTable(Class clazz) {
         return (Table) clazz.getAnnotation(Table.class);
     }
+
+
 }

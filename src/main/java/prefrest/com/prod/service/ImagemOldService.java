@@ -38,7 +38,7 @@ public class ImagemOldService {
         }
     }
 
-    public ResponseEntity<List<Imagens>> getImagens(ImagensFilter filter) {
+    public ResponseEntity<List<Imagens>> getImagens(FiltroPadrao filter) {
         List<Imagens> imagens = (List<Imagens>) imagemCommonOldRepository.getImagens(filter, Imagens.class);
 
         //List<Imagens> imagens = imagemRepositoryPerson.getImagens(filter);

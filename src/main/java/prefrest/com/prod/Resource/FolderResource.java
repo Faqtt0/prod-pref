@@ -6,12 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import prefrest.com.prod.model.Folder;
-import prefrest.com.prod.repository.filter.ImagensFilter;
+import prefrest.com.prod.repository.filter.FiltroPadrao;
 import prefrest.com.prod.service.FolderService;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.awt.image.ImageFilter;
 import java.util.List;
 
 @RestController
@@ -24,9 +23,8 @@ public class FolderResource {
     FolderService service;
 
     @GetMapping()
-    public ResponseEntity<List<Folder>> retornaFolders(ImagensFilter filter){
-        //TODO ajustar Folder get
-        return null;
+    public ResponseEntity<List<Folder>> retornaFolders(FiltroPadrao filtroPadrao){
+        return service.buscarFolders(filtroPadrao);
     }
 
     @PostMapping()

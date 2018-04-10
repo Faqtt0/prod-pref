@@ -24,12 +24,10 @@ public class PerguntaResource {
     @Autowired
     ApplicationEventPublisher publisher;
 
-    @DeleteMapping("/{codigo}")
-    public ResponseEntity removerPergunta(@PathVariable Long codigo) {
-        if (service.deletarPerguntas(codigo)){
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.badRequest().build();
+    @GetMapping("/{codigo}")
+    public ResponseEntity<List<Resposta>> retornaRepostas(@PathVariable Long codigo) {
+        //TODO PERGUNTAS Ajustar pare receber ultalt
+        return service.buscarRepostas(codigo);
     }
 
     @PostMapping()
@@ -44,9 +42,13 @@ public class PerguntaResource {
         return service.atualizarPergunta(codigo, pergunta);
     }
 
-    @GetMapping("/{codigo}")
-    public ResponseEntity<List<Resposta>> retornaRepostas(@PathVariable Long codigo) {
-        return service.buscarRepostas(codigo);
+    @DeleteMapping("/{codigo}")
+    public ResponseEntity removerPergunta(@PathVariable Long codigo) {
+        //TODO PERGUNTAS ajustar para ao excluir salvar em uma tabela auxiliar
+        if (service.deletarPerguntas(codigo)){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
 
 }

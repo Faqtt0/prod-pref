@@ -8,8 +8,8 @@ import java.util.Base64;
 
 public class UtilBase64Image {
 
-    public static String encoder(String imagem) {
-        File file = new File(imagem);
+    public static String encoder(String imagemDiretorio) {
+        File file = new File(imagemDiretorio);
         try (FileInputStream imageInFile = new FileInputStream(file)) {
             // Ler imagem
             String base64Image = "";

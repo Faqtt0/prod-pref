@@ -34,6 +34,7 @@ public class SegmentoResource {
 
     @GetMapping()
     public ResponseEntity<List<Segmento>> getAllSegmentos(){
+        //TODO SEGMENTO Ajustar para ultalt
         return ResponseEntity.ok(segmentoRepository.findAll());
     }
 
@@ -55,6 +56,7 @@ public class SegmentoResource {
     @DeleteMapping("/{codigo}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removerSegmento(@PathVariable Long codigo){
+        //TODO SEGMENTO ajustar para salvar o delete em uma tabela auxiliar
         service.deletarSegmentoEmpresa(codigo);
     }
 

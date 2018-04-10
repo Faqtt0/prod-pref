@@ -6,14 +6,12 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "AGENDA")
+@Table(name = "FOLDERHISTORICO")
 @Data
-public class Agenda {
-
+public class FolderHistorico {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -22,18 +20,9 @@ public class Agenda {
     @Size(min = 3, max = 200)
     private String descricao;
 
-    @NotNull
-    @Column(name = "DATAINI")
-    private LocalDate dataIni;
-
-    @NotNull
-    @Column(name = "DATAFIM")
-    private LocalDate dataFim;
-
     @JsonIgnore
     @Column(name = "CODIMAGEM")
     private Long codImagem;
-
 
     @Column(name = "ULTALT")
     private LocalDateTime ultAlt;

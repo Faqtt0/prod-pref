@@ -51,7 +51,7 @@
     <changeSet id="3" author="Fagner">
         <comment>TABELA AGENDA</comment>
         <createTable tableName="AGENDA">
-            <column name="ID" type="BIGINT">
+            <column name="ID" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false"
                              primaryKey="true"/>
             </column>
@@ -84,7 +84,7 @@
     <changeSet id="4" author="Fagner">
         <comment>Tabela FOLDERHISTORICO</comment>
         <createTable tableName="FOLDERHISTORICO">
-            <column name="ID" type="BIGINT">
+            <column name="ID" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false"
                              primaryKey="true"/>
             </column>
@@ -97,6 +97,8 @@
                 <constraints foreignKeyName="FK_FOLDERHISTORICO_IMAGEM"
                              references="IMAGEM(ID)"/>
             </column>
+
+            <column name="ULTALT" type="TIMESTAMP"/>
         </createTable>
     </changeSet>
     

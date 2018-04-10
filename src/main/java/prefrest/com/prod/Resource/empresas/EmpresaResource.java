@@ -11,6 +11,7 @@ import prefrest.com.prod.service.EmpresaService;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/empresas")
@@ -24,6 +25,13 @@ public class EmpresaResource {
 
     @Autowired
     ApplicationEventPublisher publisher;
+
+    @GetMapping()
+    public ResponseEntity<List<Empresa>> recuperaEmpresas(){
+        //TODO EMPRESA AJUSTAR Método recupera empresas
+        return null;
+    }
+
 
     @PostMapping()
     public ResponseEntity<Empresa> cadastrarEmpresa(@Valid @RequestBody Empresa empresa, HttpServletResponse response) {
@@ -39,6 +47,7 @@ public class EmpresaResource {
     @DeleteMapping("/{codigo}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletarEmpresa(@PathVariable Long codigo) {
+        //TODO EMPRESA Ajustar delete para salvar em uma tabela auxiliar
         empresaRespository.delete(codigo);
     }
 }
