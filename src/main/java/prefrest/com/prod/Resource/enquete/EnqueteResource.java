@@ -10,6 +10,7 @@ import prefrest.com.prod.model.enquetes.Enquete;
 import prefrest.com.prod.model.enquetes.Resposta;
 import prefrest.com.prod.repository.EnquetePersonRepository;
 import prefrest.com.prod.repository.filter.EnqueteFilter;
+import prefrest.com.prod.repository.filter.FiltroPadrao;
 import prefrest.com.prod.service.EnqueteService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -35,6 +36,11 @@ public class EnqueteResource {
                                           @RequestParam("ativo") boolean ativo) {
         return repository.filtrarEnquetes(id, descricao, ativo);
     }*/
+
+    @GetMapping("/allenquetes")
+    private List<Enquete> recuperaEnquetesTotem(FiltroPadrao filtroPadrao){
+        return service.getAllenquetes(filtroPadrao);
+    }
 
     @GetMapping()
     public List<Enquete> retornaEnquetes(EnqueteFilter filtro) {

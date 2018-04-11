@@ -7,6 +7,7 @@ import prefrest.com.prod.repository.impl.CommomRepositoryImpl;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Entity
 @Table(name = "DELETETABLES")
@@ -22,21 +23,23 @@ public class DeleteTables {
 
     @NotNull
     @Column(name = "IDTABELA")
-    private Long idTabela;
+    private String idTabela;
 
     @NotNull
     @Column(name = "ULTALT")
     private LocalDateTime ultAlt;
 
-    public DeleteTables(Class<?> tabela, Long idTabela, LocalDateTime ultAlt) {
+    public DeleteTables(Class<?> tabela, LocalDateTime ultAlt, Map<String, String> params) {
         if (CommomRepositoryImpl.isEntity(tabela)){
             Table table = CommomRepositoryImpl.getTable(tabela);
             this.tabela =  table.name();
         } else {
             this.tabela = tabela.getSimpleName();
         }
+        StringBuilder sbParams =  new StringBuilder();
+        params.forEach((s, s2) -> sbParams.append(s).append("=").append(s2).append(";"));
 
-        this.idTabela = idTabela;
+        this.idTabela = params.toString();
         this.ultAlt = ultAlt;
     }
 }

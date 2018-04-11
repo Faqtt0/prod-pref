@@ -6,6 +6,7 @@ import lombok.NonNull;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -25,4 +26,7 @@ public class Segmento {
 
     @Transient
     List<Empresa> empresas;
+
+    @Column(name = "ULTALT")
+    private LocalDateTime ultAlt;
 }

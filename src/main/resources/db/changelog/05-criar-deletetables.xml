@@ -16,7 +16,7 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="IDTABELA" type="BIGINT">
+            <column name="IDTABELA" type="varchar(300)">
                 <constraints nullable="false"/>
             </column>
 

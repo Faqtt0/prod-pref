@@ -11,6 +11,7 @@ import prefrest.com.prod.repository.EnquetePersonRepository;
 import prefrest.com.prod.repository.EnqueteRepository;
 import prefrest.com.prod.repository.PerguntaPersonRepository;
 import prefrest.com.prod.repository.RespostaRepository;
+import prefrest.com.prod.repository.filter.FiltroPadrao;
 
 import java.util.List;
 
@@ -97,5 +98,13 @@ public class EnqueteService {
             return true;
         }
         return false;
+    }
+
+    public List<Enquete> getAllenquetes(FiltroPadrao filtroPadrao) {
+        if (filtroPadrao.getAlteracao() != null){
+
+        }
+
+        return null;
     }
 }

@@ -20,6 +20,7 @@ import prefrest.com.prod.util.UtilConverterImagem;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -72,7 +73,9 @@ public class AgendaService {
     public ResponseEntity deletarImagem(Long codigo) {
         Agenda agendaSalva = agendaRepository.findOne(codigo);
         agendaRepository.delete(codigo);
-        deleteTablesRepository.save(new DeleteTables(Agenda.class, agendaSalva.getId(), LocalDateTime.now()));
+        Map<String, String> params = new HashMap<>();
+        params.put("ID", String.valueOf(agendaSalva.getId()));
+        deleteTablesRepository.save(new DeleteTables(Agenda.class, LocalDateTime.now(), params));
         if (agendaSalva.getCodImagem() != null) {
             Imagem imagemSalva = imagemRepository.findById(agendaSalva.getCodImagem());
             UtilConverterImagem.deletarImagemHD(imagemSalva.getCaminho());

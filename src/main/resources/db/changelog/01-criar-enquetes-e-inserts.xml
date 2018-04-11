@@ -22,6 +22,7 @@
 
             <column name="DATAINI" type="DATE"/>
             <column name="DATAFIM" type="DATE"/>
+            <column name="ULTALT" type="TIMESTAMP"/>
         </createTable>
 
 

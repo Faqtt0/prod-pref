@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "EMPRESA")
@@ -37,5 +38,8 @@ public class Empresa {
 
     @Size(min = 10, max = 150)
     private String email;
+
+    @Column(name = "ULTALT")
+    private LocalDateTime ultAlt;
 
 }

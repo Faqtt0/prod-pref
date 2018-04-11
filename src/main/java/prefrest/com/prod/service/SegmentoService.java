@@ -23,6 +23,7 @@ public class SegmentoService {
     @Autowired
     EmpresaRespository empresaRespository;
 
+
     public ResponseEntity<Segmento> atualizarSegmento(Long codigo, Segmento segmento) {
         Segmento segmentoSalvo = segmentoRepository.findOne(codigo);
         BeanUtils.copyProperties(segmento, segmentoSalvo, "id");

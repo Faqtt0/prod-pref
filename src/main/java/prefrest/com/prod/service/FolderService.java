@@ -22,6 +22,7 @@ import prefrest.com.prod.util.UtilConverterImagem;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -75,7 +76,9 @@ public class FolderService {
     public ResponseEntity deletarImagem(Long codigo) {
         Folder folderSalvo = folderRespository.findOne(codigo);
         folderRespository.delete(codigo);
-        deleteTablesRepository.save(new DeleteTables(Folder.class, folderSalvo.getId(), LocalDateTime.now()));
+        Map<String, String> params = new HashMap<>();
+        params.put("ID", String.valueOf(folderSalvo.getId()));
+        deleteTablesRepository.save(new DeleteTables(Folder.class, LocalDateTime.now(), params));
         if (folderSalvo.getCodImagem() != null) {
             Imagem imagemSalva = imagemRepository.findById(folderSalvo.getCodImagem());
             UtilConverterImagem.deletarImagemHD(imagemSalva.getCaminho());
