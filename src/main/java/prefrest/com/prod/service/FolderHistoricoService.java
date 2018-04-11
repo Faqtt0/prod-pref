@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import prefrest.com.prod.constants.Constants;
 import prefrest.com.prod.event.RecursoEvent;
+import prefrest.com.prod.model.DeleteTables;
 import prefrest.com.prod.model.Folder;
 import prefrest.com.prod.model.FolderHistorico;
 import prefrest.com.prod.model.Imagem;
+import prefrest.com.prod.repository.DeleteTablesRepository;
 import prefrest.com.prod.repository.FolderHistoricoRespository;
 import prefrest.com.prod.repository.ImagemRepository;
 import prefrest.com.prod.repository.filter.FiltroPadrao;
@@ -32,6 +34,9 @@ public class FolderHistoricoService {
 
     @Autowired
     ImagemRepository imagemRepository;
+
+    @Autowired
+    DeleteTablesRepository deleteTablesRepository;
 
     public ResponseEntity<FolderHistorico> salvarFolder(FolderHistorico folder, HttpServletResponse response, ApplicationEventPublisher publisher) {
         folder.setUltAlt(LocalDateTime.now());
@@ -72,6 +77,7 @@ public class FolderHistoricoService {
     public ResponseEntity deletarImagem(Long codigo) {
         FolderHistorico folderSalvo = folderHistoricoRespository.findOne(codigo);
         folderHistoricoRespository.delete(codigo);
+        deleteTablesRepository.save(new DeleteTables(FolderHistorico.class, folderSalvo.getId(), LocalDateTime.now()));
         if (folderSalvo.getCodImagem() != null) {
             Imagem imagemSalva = imagemRepository.findById(folderSalvo.getCodImagem());
             UtilConverterImagem.deletarImagemHD(imagemSalva.getCaminho());
@@ -86,15 +92,11 @@ public class FolderHistoricoService {
         if (filtroPadrao.getAlteracao() != null) {
             LocalDateTime dtUltAlt = LocalDateTime.parse(filtroPadrao.getAlteracao());
             List<FolderHistorico> foldersSalvos = folderHistoricoRespository.findAllByUltAltAfterOrderByUltAlt(dtUltAlt);
-            foldersSalvos.forEach(folder -> {
-                recuperaImagens(folder);
-            });
+            foldersSalvos.forEach(folder -> recuperaImagens(folder));
             return ResponseEntity.ok().body(foldersSalvos);
         } else {
             folders = folderHistoricoRespository.findAll();
-            folders.forEach(folder -> {
-                recuperaImagens(folder);
-            });
+            folders.forEach(folder -> recuperaImagens(folder));
         }
         return ResponseEntity.ok().body(folders);
     }

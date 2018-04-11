@@ -9,11 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import prefrest.com.prod.constants.Constants;
 import prefrest.com.prod.event.RecursoEvent;
-import prefrest.com.prod.model.Agenda;
-import prefrest.com.prod.model.Folder;
-import prefrest.com.prod.model.FolderHistorico;
-import prefrest.com.prod.model.Imagem;
+import prefrest.com.prod.model.*;
 import prefrest.com.prod.repository.AgendaRepository;
+import prefrest.com.prod.repository.DeleteTablesRepository;
 import prefrest.com.prod.repository.ImagemRepository;
 import prefrest.com.prod.repository.filter.FiltroPadrao;
 import prefrest.com.prod.util.UtilBase64Image;
@@ -32,6 +30,9 @@ public class AgendaService {
 
     @Autowired
     ImagemRepository imagemRepository;
+
+    @Autowired
+    DeleteTablesRepository deleteTablesRepository;
 
     public ResponseEntity<Agenda> salvarAgenda(Agenda agenda, HttpServletResponse response, ApplicationEventPublisher publisher) {
         agenda.setUltAlt(LocalDateTime.now());
@@ -71,6 +72,7 @@ public class AgendaService {
     public ResponseEntity deletarImagem(Long codigo) {
         Agenda agendaSalva = agendaRepository.findOne(codigo);
         agendaRepository.delete(codigo);
+        deleteTablesRepository.save(new DeleteTables(Agenda.class, agendaSalva.getId(), LocalDateTime.now()));
         if (agendaSalva.getCodImagem() != null) {
             Imagem imagemSalva = imagemRepository.findById(agendaSalva.getCodImagem());
             UtilConverterImagem.deletarImagemHD(imagemSalva.getCaminho());
@@ -84,15 +86,11 @@ public class AgendaService {
         if (filtroPadrao.getAlteracao() != null) {
             LocalDateTime dtUltAlt = LocalDateTime.parse(filtroPadrao.getAlteracao());
             List<Agenda> agendaSalvas = agendaRepository.findAllByUltAltAfterOrderByUltAlt(dtUltAlt);
-            agendaSalvas.forEach(agenda -> {
-                recuperaImagens(agenda);
-            });
+            agendaSalvas.forEach(agenda -> recuperaImagens(agenda));
             return ResponseEntity.ok().body(agendaSalvas);
         } else {
             agendasAll = agendaRepository.findAll();
-            agendasAll.forEach(agenda -> {
-                recuperaImagens(agenda);
-            });
+            agendasAll.forEach(agenda -> recuperaImagens(agenda));
         }
         return ResponseEntity.ok().body(agendasAll);
     }

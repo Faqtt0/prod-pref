@@ -1,8 +1,8 @@
 package prefrest.com.prod.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import prefrest.com.prod.repository.impl.CommomRepositoryImpl;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -28,8 +28,14 @@ public class DeleteTables {
     @Column(name = "ULTALT")
     private LocalDateTime ultAlt;
 
-    public DeleteTables(String tabela, Long idTabela, LocalDateTime ultAlt) {
-        this.tabela = tabela;
+    public DeleteTables(Class<?> tabela, Long idTabela, LocalDateTime ultAlt) {
+        if (CommomRepositoryImpl.isEntity(tabela)){
+            Table table = CommomRepositoryImpl.getTable(tabela);
+            this.tabela =  table.name();
+        } else {
+            this.tabela = tabela.getSimpleName();
+        }
+
         this.idTabela = idTabela;
         this.ultAlt = ultAlt;
     }

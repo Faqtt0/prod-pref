@@ -5,14 +5,13 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
-import prefrest.com.prod.repository.ImagemCommomRepository;
-import prefrest.com.prod.repository.filter.FiltroPadrao;
+import prefrest.com.prod.repository.CommomRepository;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Service
-public class ImagemCommomRepositoryImpl implements ImagemCommomRepository {
+public class CommomRepositoryImpl implements CommomRepository {
 
     @Autowired
     NamedParameterJdbcTemplate template;
@@ -25,8 +24,6 @@ public class ImagemCommomRepositoryImpl implements ImagemCommomRepository {
         MapSqlParameterSource params = new MapSqlParameterSource().addValue("ID", codigo);
         return template.queryForObject(sbSql.toString(), params, new BeanPropertyRowMapper<>(Long.class));
     }
-
-
 
     @Override
     public boolean updateCodImagem(Long codigo, Long codImagem, Class<?> clazz) {
@@ -47,11 +44,11 @@ public class ImagemCommomRepositoryImpl implements ImagemCommomRepository {
         }
     }
 
-    private boolean isEntity(Class clazz) {
+    public static boolean isEntity(Class clazz) {
         return clazz.getAnnotation(Entity.class) != null;
     }
 
-    private Table getTable(Class clazz) {
+    public static Table getTable(Class clazz) {
         return (Table) clazz.getAnnotation(Table.class);
     }
 

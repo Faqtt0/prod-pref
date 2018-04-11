@@ -18,7 +18,6 @@ public class Imagem {
 
     @Transient
     private String imagemBase64;
-    //TODO ajustar imagem
 
     public Imagem(Long id, String caminho, String imagemBase64) {
         this.id = id;

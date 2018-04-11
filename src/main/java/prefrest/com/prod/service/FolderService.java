@@ -74,14 +74,13 @@ public class FolderService {
 
     public ResponseEntity deletarImagem(Long codigo) {
         Folder folderSalvo = folderRespository.findOne(codigo);
-        //deleteTablesRepository.save(new DeleteTables());
         folderRespository.delete(codigo);
+        deleteTablesRepository.save(new DeleteTables(Folder.class, folderSalvo.getId(), LocalDateTime.now()));
         if (folderSalvo.getCodImagem() != null) {
             Imagem imagemSalva = imagemRepository.findById(folderSalvo.getCodImagem());
             UtilConverterImagem.deletarImagemHD(imagemSalva.getCaminho());
             imagemRepository.deleteById(folderSalvo.getCodImagem());
         }
-
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -90,15 +89,11 @@ public class FolderService {
         if (filtroPadrao.getAlteracao() != null) {
             LocalDateTime dtUltAlt = LocalDateTime.parse(filtroPadrao.getAlteracao());
             List<Folder> foldersSalvos = folderRespository.findAllByUltAltAfterOrderByUltAlt(dtUltAlt);
-            foldersSalvos.forEach(folder -> {
-                recuperaImagens(folder);
-            });
+            foldersSalvos.forEach(folder -> recuperaImagens(folder));
             return ResponseEntity.ok().body(foldersSalvos);
         } else {
             folders = folderRespository.findAll();
-            folders.forEach(folder -> {
-                recuperaImagens(folder);
-            });
+            folders.forEach(folder -> recuperaImagens(folder));
         }
         return ResponseEntity.ok().body(folders);
     }
