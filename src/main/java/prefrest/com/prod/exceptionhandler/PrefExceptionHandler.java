@@ -23,6 +23,7 @@ import prefrest.com.prod.exception.ImagemNaoEncontradaException;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,8 +42,6 @@ public class PrefExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, erros, headers, status, request);
     }
 
-
-
     //Utilizado pra os argumentos conforme o bean validation
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -56,6 +55,14 @@ public class PrefExceptionHandler extends ResponseEntityExceptionHandler {
         String mensagemDesenvolvedor = ExceptionUtils.getRootCauseMessage(ex);
         List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
         return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler({DateTimeParseException.class})
+    public ResponseEntity<Object> handleDateTimeParseException(DateTimeParseException ex, WebRequest request) {
+        String mensagemUsuario = messageSource.getMessage("data-invalida", null, LocaleContextHolder.getLocale());
+        String mensagemDesenvolvedor = ex.toString();
+        List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+        return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler({ EmptyResultDataAccessException.class })

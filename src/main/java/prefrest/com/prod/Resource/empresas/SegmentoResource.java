@@ -9,6 +9,7 @@ import prefrest.com.prod.model.empresas.Empresa;
 import prefrest.com.prod.model.empresas.Segmento;
 import prefrest.com.prod.repository.EmpresaRespository;
 import prefrest.com.prod.repository.SegmentoRepository;
+import prefrest.com.prod.repository.filter.FiltroPadrao;
 import prefrest.com.prod.service.SegmentoService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -34,8 +35,12 @@ public class SegmentoResource {
 
     @GetMapping()
     public ResponseEntity<List<Segmento>> getAllSegmentos(){
-        //TODO SEGMENTO Ajustar para ultalt
         return ResponseEntity.ok(segmentoRepository.findAll());
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Segmento>> getAllSegmentosAllEmpresas(FiltroPadrao filtroPadrao){
+        return service.getAllSegByUltAlt(filtroPadrao);
     }
 
     @GetMapping("/{codigo}")
@@ -56,7 +61,6 @@ public class SegmentoResource {
     @DeleteMapping("/{codigo}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removerSegmento(@PathVariable Long codigo){
-        //TODO SEGMENTO ajustar para salvar o delete em uma tabela auxiliar
         service.deletarSegmentoEmpresa(codigo);
     }
 

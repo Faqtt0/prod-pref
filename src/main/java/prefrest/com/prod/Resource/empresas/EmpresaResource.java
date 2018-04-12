@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import prefrest.com.prod.model.empresas.Empresa;
 import prefrest.com.prod.repository.EmpresaRespository;
+import prefrest.com.prod.repository.filter.FiltroPadrao;
 import prefrest.com.prod.service.EmpresaService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -26,10 +27,9 @@ public class EmpresaResource {
     @Autowired
     ApplicationEventPublisher publisher;
 
-    @GetMapping()
-    public ResponseEntity<List<Empresa>> recuperaEmpresas(){
-        //TODO EMPRESA AJUSTAR Método recupera empresas
-        return null;
+    @GetMapping("/all")
+    public ResponseEntity<List<Empresa>> recuperaEmpresas(FiltroPadrao filtroPadrao){
+        return service.getAllEmpresas(filtroPadrao);
     }
 
 
@@ -47,7 +47,6 @@ public class EmpresaResource {
     @DeleteMapping("/{codigo}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletarEmpresa(@PathVariable Long codigo) {
-        //TODO EMPRESA Ajustar delete para salvar em uma tabela auxiliar
-        empresaRespository.delete(codigo);
+        service.deletarEmpresa(codigo);
     }
 }

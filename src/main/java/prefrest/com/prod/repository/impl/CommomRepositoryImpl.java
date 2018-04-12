@@ -9,6 +9,7 @@ import prefrest.com.prod.repository.CommomRepository;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Service
 public class CommomRepositoryImpl implements CommomRepository {
@@ -33,6 +34,21 @@ public class CommomRepositoryImpl implements CommomRepository {
         MapSqlParameterSource parmas = new MapSqlParameterSource().addValue("CODIMAGEM", codImagem)
                 .addValue("ID", codigo);
         return template.update(sbSql.toString(), parmas) > 0;
+    }
+
+    @Override
+    public boolean updateUltAlt(Class<?> clazz, LocalDateTime ultAlt, Long id) {
+        StringBuilder sbSql = new StringBuilder("UPDATE ");
+        if (isEntity(clazz)){
+            Table tabela = getTable(clazz);
+            sbSql.append(tabela.name());
+        } else {
+            sbSql.append(clazz.getSimpleName());
+        }
+        sbSql.append(" SET ULTALT = :ULTALT WHERE ID = :ID");
+        MapSqlParameterSource params = new MapSqlParameterSource().addValue("ULTALT", ultAlt)
+                .addValue("ID", id);
+        return template.update(sbSql.toString(), params) > 0;
     }
 
     private void getTabela(Class<?> clazz, StringBuilder sbSql) {

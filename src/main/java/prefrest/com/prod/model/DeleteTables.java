@@ -39,7 +39,7 @@ public class DeleteTables {
         StringBuilder sbParams =  new StringBuilder();
         params.forEach((s, s2) -> sbParams.append(s).append("=").append(s2).append(";"));
 
-        this.idTabela = params.toString();
+        this.idTabela = params.toString().replace("{", "").replace("}", ";");
         this.ultAlt = ultAlt;
     }
 }

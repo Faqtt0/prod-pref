@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import prefrest.com.prod.model.enquetes.Resposta;
 import prefrest.com.prod.repository.RespostaRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -30,7 +31,7 @@ public class RespostaRepositoryImpl implements RespostaRepository {
     @Override
     public Resposta salvarResposta(Resposta resposta) {
         Long respostaCod = incrementaResposta();
-        String sqlInsert = "INSERT INTO RESPOSTA (CODIGO, CODPERGUNTA, CODENQUETE, RESPOSTA) VALUES (:COD, :CODPERG, :CODENQ, :RESP)";
+        String sqlInsert = "INSERT INTO RESPOSTA (CODIGO, CODPERGUNTA, CODENQUETE, RESPOSTA, ULTALT) VALUES (:COD, :CODPERG, :CODENQ, :RESP, :ULTALT)";
         MapSqlParameterSource params = getMapSqlParameterSourceResposta(resposta, respostaCod);
         template.update(sqlInsert, params);
         return findById(respostaCod);
@@ -38,9 +39,10 @@ public class RespostaRepositoryImpl implements RespostaRepository {
 
     private MapSqlParameterSource getMapSqlParameterSourceResposta(Resposta resposta, Long respostaCod) {
         return new MapSqlParameterSource().addValue("COD", respostaCod)
-                    .addValue("CODPERG", resposta.getCodPergunta())
-                    .addValue("CODENQ", resposta.getCodEnquete())
-                    .addValue("RESP", resposta.getResposta());
+                .addValue("CODPERG", resposta.getCodPergunta())
+                .addValue("CODENQ", resposta.getCodEnquete())
+                .addValue("RESP", resposta.getResposta())
+                .addValue("ULTALT", resposta.getUltAlt());
     }
 
     @Override
@@ -58,8 +60,8 @@ public class RespostaRepositoryImpl implements RespostaRepository {
 
     @Override
     public Resposta atualizarResposta(Resposta resposta) {
-        String sql = "UPDATE RESPOSTA SET CODPERGUNTA =:CODPERG, CODENQUETE = :CODENQ, RESPOSTA = :RESP WHERE CODIGO = :COD";
-        MapSqlParameterSource params =  getMapSqlParameterSourceResposta(resposta, resposta.getCodigo());
+        String sql = "UPDATE RESPOSTA SET CODPERGUNTA =:CODPERG, CODENQUETE = :CODENQ, RESPOSTA = :RESP, ULTALT = :ULTALT WHERE CODIGO = :COD";
+        MapSqlParameterSource params = getMapSqlParameterSourceResposta(resposta, resposta.getCodigo());
         template.update(sql, params);
         return findById(resposta.getCodigo());
     }
@@ -67,7 +69,7 @@ public class RespostaRepositoryImpl implements RespostaRepository {
     @Override
     public List<Resposta> findByPergunta(Long codigo) {
         String sql = "SELECT * FROM RESPOSTA WHERE CODPERGUNTA = :CODPERGUNTA";
-        MapSqlParameterSource params =  new MapSqlParameterSource().addValue("CODPERGUNTA", codigo);
+        MapSqlParameterSource params = new MapSqlParameterSource().addValue("CODPERGUNTA", codigo);
         return template.query(sql, params, new BeanPropertyRowMapper<>(Resposta.class));
     }
 
@@ -90,5 +92,18 @@ public class RespostaRepositoryImpl implements RespostaRepository {
         String sql = "DELETE FROM RESPOSTA WHERE CODENQUETE = :ENQUETE";
         MapSqlParameterSource params = new MapSqlParameterSource().addValue("ENQUETE", codEnquete);
         return template.update(sql, params) > 0;
+    }
+
+    @Override
+    public List<Resposta> findByUltAltAfterOrderByUltAlt(LocalDateTime ultAlt) {
+        String sql = "SELECT * FROM RESPOSTA WHERE ULTALT > :ULTALT";
+        MapSqlParameterSource params = new MapSqlParameterSource().addValue("ULTALT", ultAlt);
+        return template.query(sql, params, new BeanPropertyRowMapper<>(Resposta.class));
+    }
+
+    @Override
+    public List<Resposta> findAll() {
+        String sql = "SELECT * FROM RESPOSTA";
+        return template.query(sql, new MapSqlParameterSource(), new BeanPropertyRowMapper<>(Resposta.class));
     }
 }

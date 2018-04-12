@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import prefrest.com.prod.model.enquetes.Enquete;
 import prefrest.com.prod.model.enquetes.Pergunta;
 import prefrest.com.prod.model.enquetes.Resposta;
+import prefrest.com.prod.repository.filter.FiltroPadrao;
 import prefrest.com.prod.service.PerguntaService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -24,9 +25,13 @@ public class PerguntaResource {
     @Autowired
     ApplicationEventPublisher publisher;
 
+    @GetMapping("/all")
+    public ResponseEntity<List<Pergunta>> retornaAllPerguntasUltAlt(FiltroPadrao filtroPadrao) {
+        return service.getAllPerguntas(filtroPadrao);
+    }
+
     @GetMapping("/{codigo}")
     public ResponseEntity<List<Resposta>> retornaRepostas(@PathVariable Long codigo) {
-        //TODO PERGUNTAS Ajustar pare receber ultalt
         return service.buscarRepostas(codigo);
     }
 
@@ -44,8 +49,7 @@ public class PerguntaResource {
 
     @DeleteMapping("/{codigo}")
     public ResponseEntity removerPergunta(@PathVariable Long codigo) {
-        //TODO PERGUNTAS ajustar para ao excluir salvar em uma tabela auxiliar
-        if (service.deletarPerguntas(codigo)){
+        if (service.deletarPerguntas(codigo)) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.badRequest().build();

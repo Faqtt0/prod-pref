@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -35,5 +36,7 @@ public class Pergunta {
     @Transient
     private List<Resposta> respostas;
 
+    @Column(name = "ULTALT")
+    private LocalDateTime ultAlt;
 
 }

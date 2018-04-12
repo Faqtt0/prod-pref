@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import prefrest.com.prod.model.enquetes.Pergunta;
 import prefrest.com.prod.model.enquetes.Resposta;
 import prefrest.com.prod.repository.RespostaRepository;
+import prefrest.com.prod.repository.filter.FiltroPadrao;
 import prefrest.com.prod.service.RespostaService;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/respostas")
@@ -26,6 +28,12 @@ public class RespostaResource {
     @Autowired
     ApplicationEventPublisher publisher;
 
+    @GetMapping("/all")
+    public ResponseEntity<List<Resposta>> getAllRespostas(FiltroPadrao filtroPadrao) {
+        return service.getAllRepostas(filtroPadrao);
+    }
+
+
     @PostMapping()
     public ResponseEntity<Resposta> salvarResposta(@Valid @RequestBody Resposta resposta, HttpServletResponse response) {
         return service.salvarResposta(resposta, response, publisher);
@@ -39,7 +47,6 @@ public class RespostaResource {
 
     @DeleteMapping("/{codigo}")
     public ResponseEntity removerResposta(@PathVariable Long codigo) {
-        //TODO RESPOSTAS ajustar para salvar o delete em uma tabela auxiliar
         if (service.removerResposta(codigo)){
             return ResponseEntity.noContent().build();
         }

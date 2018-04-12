@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import prefrest.com.prod.model.enquetes.Pergunta;
 import prefrest.com.prod.model.enquetes.PerguntaID;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface PerguntaRepository extends JpaRepository<Pergunta, PerguntaID> {
@@ -12,4 +13,6 @@ public interface PerguntaRepository extends JpaRepository<Pergunta, PerguntaID> 
     @Query(nativeQuery = true, value =  "SELECT COALESCE(MAX(CODIGO),0) + 1 AS CODIGO FROM PERGUNTA")
     Long incrementCodigo ();
 
+    List<Pergunta> findAllByCodEnqueteOrderByCodigo(Long codigoEnquete);
+    List<Pergunta> findAllByUltAltAfterOrderByUltAlt(LocalDateTime ultalt);
 }

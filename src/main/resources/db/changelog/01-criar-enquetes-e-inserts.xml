@@ -54,6 +54,8 @@
             <column name="TIPOPERGUNTA" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
+
+            <column name="ULTALT" type="TIMESTAMP"/>
         </createTable>
 
 
@@ -85,6 +87,8 @@
             <column name="RESPOSTA" type="TEXT">
                 <constraints nullable="false"/>
             </column>
+
+            <column name="ULTALT" type="TIMESTAMP"/>
         </createTable>
 
 

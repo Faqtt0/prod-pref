@@ -37,15 +37,13 @@ public class EnqueteResource {
         return repository.filtrarEnquetes(id, descricao, ativo);
     }*/
 
-    @GetMapping("/allenquetes")
-    private List<Enquete> recuperaEnquetesTotem(FiltroPadrao filtroPadrao){
+    @GetMapping("/all")
+    private ResponseEntity<List<Enquete>> recuperaEnquetesTotem(FiltroPadrao filtroPadrao){
         return service.getAllenquetes(filtroPadrao);
     }
 
     @GetMapping()
-    public List<Enquete> retornaEnquetes(EnqueteFilter filtro) {
-        //TODO ENQUETE ajustar para receber ultalt
-        return repository.filtrarEnquetes(filtro);
+    public List<Enquete> retornaEnquetes(EnqueteFilter filtro) {return repository.filtrarEnquetes(filtro);
     }
 
     @GetMapping("/{id}")
@@ -72,7 +70,6 @@ public class EnqueteResource {
 
     @DeleteMapping("/{codigo}")
     public ResponseEntity remover (@PathVariable Long codigo) {
-        //TODO ENQUETE AJUSTAR PARA SALVAR DELETE EM UMA TABELA AUXILIAR
         if (service.deletarEnquete(codigo)){
             return ResponseEntity.noContent().build();
         }
