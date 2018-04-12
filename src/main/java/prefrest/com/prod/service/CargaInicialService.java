@@ -51,47 +51,67 @@ public class CargaInicialService {
             LocalDateTime dataUltAlt = LocalDateTime.parse(filtroPadrao.getAlteracao());
             recuperaTabelas().forEach(s -> {
                 if (s.equals("Enquete")){
-                    List<Enquete> enquetes = enqueteRepository.findAllByUltAltAfterOrderByUltAlt(dataUltAlt);
-                    enquetes.forEach(enquete -> {
-                        enquete.setPerguntas(perguntaRepository.findAllByCodEnqueteOrderByCodigo(enquete.getId()));
-                        enquete.getPerguntas().forEach(pergunta -> pergunta.setRespostas(respostaRepository.carregarRespostas(pergunta.getCodEnquete(), pergunta.getCodigo())));
-                    });
-                    dadosTabelas.put("ENQUETE", enquetes);
+                    recuperaDadosEnquete(dadosTabelas, dataUltAlt);
                 } else if (s.equals("Segmento")) {
-                    List<Segmento> segmentos = segmentoRepository.findAllByUltAltAfterOrderByUltAlt(dataUltAlt);
-                    segmentos.forEach(segmento -> {
-                        segmento.setEmpresas(empresaRespository.findAllByCodSegmento(segmento.getId()));
-                    });
-                    dadosTabelas.put("SEGMENTO", segmentos);
+                    recuperaDadosSegmento(dadosTabelas, dataUltAlt);
                 } else if (s.equals("Folder")){
-                    List<Folder> folder = folderRespository.findAllByUltAltAfterOrderByUltAlt(dataUltAlt);
-                    folder.forEach(f -> {
-                        Imagem imagemFolder = imagemRepository.findById(f.getCodImagem());
-                        imagemFolder.setImagemBase64(UtilBase64Image.encoder(imagemFolder.getCaminho()));
-                        f.setImagem(imagemFolder);
-                    });
-                    dadosTabelas.put("FOLDER", folder);
+                    recuperaDadosFolder(dadosTabelas, dataUltAlt);
                 } else if (s.equals("FolderHistorico")){
-                    List<FolderHistorico> folderHistorico = folderHistoricoRespository.findAllByUltAltAfterOrderByUltAlt(dataUltAlt);
-                    folderHistorico.forEach(folderHist ->{
-                        Imagem imagemHist = imagemRepository.findById(folderHist.getCodImagem());
-                        imagemHist.setImagemBase64(UtilBase64Image.encoder(imagemHist.getCaminho()));
-                        folderHist.setImagem(imagemHist);
-                    } );
-                    dadosTabelas.put("FOLDERHISTORICO", folderHistorico);
+                    recuperaDadosFolderHist(dadosTabelas, dataUltAlt);
                 } else {
-                    List<Agenda> agenda = agendaRepository.findAllByUltAltAfterOrderByUltAlt(dataUltAlt);
-                    agenda.forEach(a -> {
-                        Imagem imagemAgenda = imagemRepository.findById(a.getCodImagem());
-                        imagemAgenda.setImagemBase64(UtilBase64Image.encoder(imagemAgenda.getCaminho()));
-                        a.setImagem(imagemAgenda);
-                    });
-                    dadosTabelas.put("AGENDA", agenda);
+                    recuperaDadosAgenda(dadosTabelas, dataUltAlt);
                 }
             });
             return ResponseEntity.ok().body(dadosTabelas);
         }
         return ResponseEntity.ok().build();
+    }
+
+    private void recuperaDadosAgenda(Map<String, Object> dadosTabelas, LocalDateTime dataUltAlt) {
+        List<Agenda> agenda = agendaRepository.findAllByUltAltAfterOrderByUltAlt(dataUltAlt);
+        agenda.forEach(a -> {
+            Imagem imagemAgenda = imagemRepository.findById(a.getCodImagem());
+            imagemAgenda.setImagemBase64(UtilBase64Image.encoder(imagemAgenda.getCaminho()));
+            a.setImagem(imagemAgenda);
+        });
+        dadosTabelas.put("AGENDA", agenda);
+    }
+
+    private void recuperaDadosFolderHist(Map<String, Object> dadosTabelas, LocalDateTime dataUltAlt) {
+        List<FolderHistorico> folderHistorico = folderHistoricoRespository.findAllByUltAltAfterOrderByUltAlt(dataUltAlt);
+        folderHistorico.forEach(folderHist ->{
+            Imagem imagemHist = imagemRepository.findById(folderHist.getCodImagem());
+            imagemHist.setImagemBase64(UtilBase64Image.encoder(imagemHist.getCaminho()));
+            folderHist.setImagem(imagemHist);
+        } );
+        dadosTabelas.put("FOLDERHISTORICO", folderHistorico);
+    }
+
+    private void recuperaDadosFolder(Map<String, Object> dadosTabelas, LocalDateTime dataUltAlt) {
+        List<Folder> folder = folderRespository.findAllByUltAltAfterOrderByUltAlt(dataUltAlt);
+        folder.forEach(f -> {
+            Imagem imagemFolder = imagemRepository.findById(f.getCodImagem());
+            imagemFolder.setImagemBase64(UtilBase64Image.encoder(imagemFolder.getCaminho()));
+            f.setImagem(imagemFolder);
+        });
+        dadosTabelas.put("FOLDER", folder);
+    }
+
+    private void recuperaDadosSegmento(Map<String, Object> dadosTabelas, LocalDateTime dataUltAlt) {
+        List<Segmento> segmentos = segmentoRepository.findAllByUltAltAfterOrderByUltAlt(dataUltAlt);
+        segmentos.forEach(segmento -> {
+            segmento.setEmpresas(empresaRespository.findAllByCodSegmento(segmento.getId()));
+        });
+        dadosTabelas.put("SEGMENTO", segmentos);
+    }
+
+    private void recuperaDadosEnquete(Map<String, Object> dadosTabelas, LocalDateTime dataUltAlt) {
+        List<Enquete> enquetes = enqueteRepository.findAllByUltAltAfterOrderByUltAlt(dataUltAlt);
+        enquetes.forEach(enquete -> {
+            enquete.setPerguntas(perguntaRepository.findAllByCodEnqueteOrderByCodigo(enquete.getId()));
+            enquete.getPerguntas().forEach(pergunta -> pergunta.setRespostas(respostaRepository.carregarRespostas(pergunta.getCodEnquete(), pergunta.getCodigo())));
+        });
+        dadosTabelas.put("ENQUETE", enquetes);
     }
 
     private List<String> recuperaTabelas (){
