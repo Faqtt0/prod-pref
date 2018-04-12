@@ -89,7 +89,6 @@ public class CargaInicialService {
                     dadosTabelas.put("AGENDA", agenda);
                 }
             });
-            dadosTabelas.
             return ResponseEntity.ok().body(dadosTabelas);
         }
         return ResponseEntity.ok().build();
