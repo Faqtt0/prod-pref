@@ -20,6 +20,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import prefrest.com.prod.exception.EnqueteNaoPermitidaException;
 import prefrest.com.prod.exception.ImagemNaoEncontradaException;
+import prefrest.com.prod.exception.UsuarioException;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -84,6 +85,14 @@ public class PrefExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({ ImagemNaoEncontradaException.class })
     public ResponseEntity<Object> handleImagemNaoEncontradaException(ImagemNaoEncontradaException ex) {
         String mensagemUsuario = messageSource.getMessage("imagem.nao-encontrada", null, LocaleContextHolder.getLocale());
+        String mensagemDesenvolvedor = ex.toString();
+        List<PrefExceptionHandler.Erro> erros = Arrays.asList(new PrefExceptionHandler.Erro(mensagemUsuario, mensagemDesenvolvedor));
+        return ResponseEntity.badRequest().body(erros);
+    }
+
+    @ExceptionHandler({UsuarioException.class})
+    public ResponseEntity<Object> handleUsuarioException(UsuarioException ex) {
+        String mensagemUsuario = messageSource.getMessage("usuario.nao-encontrado", null, LocaleContextHolder.getLocale());
         String mensagemDesenvolvedor = ex.toString();
         List<PrefExceptionHandler.Erro> erros = Arrays.asList(new PrefExceptionHandler.Erro(mensagemUsuario, mensagemDesenvolvedor));
         return ResponseEntity.badRequest().body(erros);

@@ -12,6 +12,7 @@ import prefrest.com.prod.model.enquetes.Enquete;
 import prefrest.com.prod.repository.*;
 import prefrest.com.prod.repository.filter.FiltroPadrao;
 import prefrest.com.prod.util.UtilBase64Image;
+import prefrest.com.prod.util.UtilPasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.*;
