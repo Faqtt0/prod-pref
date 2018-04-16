@@ -6,6 +6,19 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
 
     <changeSet id="1" author="Fagner" failOnError="true">
+        <comment>TABELA TIPO USUARIO</comment>
+        <createTable tableName="TIPOUSUARIO">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false"
+                             primaryKey="true"/>
+            </column>
+            <column name="TIPO" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="Fagner" failOnError="true">
         <comment>TABELA USUARIOS</comment>
         <createTable tableName="USUARIOS">
             <column name="ID" type="BIGINT" autoIncrement="true">
@@ -21,10 +34,67 @@
             <column name="SENHA" type="BLOB">
                 <constraints nullable="false"/>
             </column>
+            <column name="CODTIPOUSUARIO" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="FK_USUARIOS_TIPOUSUARIO"
+                             references="TIPOUSUARIO(ID)"/>
+            </column>
         </createTable>
 
         <modifySql dbms="mysql">
             <append value="ENGINE=INNODB CHARSET=UTF8 "/>
         </modifySql>
+    </changeSet>
+
+
+
+    <changeSet id="3" author="fagner">
+        <comment>TABELA PERMISSAO - PERMISSÕES DO SISTEMA</comment>
+        <createTable tableName="PERMISSAO">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+
+            <column name="PERMISSAO" type="VARCHAR(200)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <modifySql dbms="mysql">
+            <append value="ENGINE=INNODB CHARSET=UTF8 "/>
+        </modifySql>
+    </changeSet>
+
+    <changeSet id="4" author="fagner">
+        <comment>TABELA USUARIOPERMISSAO - PERMISSÕES DO SISTEMA LIGADAS AO USUÁRIO</comment>
+        <createTable tableName="USUARIOPERMISSAO">
+            <column name="CODTIPOUSUARIO" type="BIGINT">
+                <constraints nullable="false"  primaryKey="true"/>
+            </column>
+
+            <column name="CODPERMISSAO" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+        <modifySql dbms="mysql">
+            <append value="ENGINE=INNODB CHARSET=UTF8 "/>
+        </modifySql>
+    </changeSet>
+
+    <changeSet id="5" author="Fagner" >
+        <comment>FOREIGN KEY COMPOSTA TABELAS USUARIOPERMISSAO/TIPOUSUARIO</comment>
+        <addForeignKeyConstraint baseColumnNames="CODTIPOUSUARIO"
+                                 baseTableName="USUARIOPERMISSAO"
+                                 constraintName="FK_USUARIOPERMISSAO_TIPOUSUARIO"
+                                 referencedColumnNames="ID"
+                                 referencedTableName="TIPOUSUARIO"/>
+    </changeSet>
+
+    <changeSet id="6" author="Fagner" >
+        <comment>FOREIGN KEY COMPOSTA TABELAS USUARIOPERMISSAO/PERMISSAO</comment>
+        <addForeignKeyConstraint baseColumnNames="CODPERMISSAO"
+                                 baseTableName="USUARIOPERMISSAO"
+                                 constraintName="FK_USUARIOPERMISSAO_PERMISSAO"
+                                 referencedColumnNames="ID"
+                                 referencedTableName="PERMISSAO"/>
     </changeSet>
 </databaseChangeLog>

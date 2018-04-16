@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+
+    <changeSet id="1" author="Fagner" failOnError="true">
+        <comment>INSERT NA TABELA DE PERMISSAO COM AS PERMISSÕES DO SISTEMA</comment>
+        <sqlFile
+                encoding="utf8"
+                path="db/changelog/sql/01-permissoes.sql"
+                splitStatements="true"
+                stripComments="false"
+                endDelimiter=";"/>
+    </changeSet>
+
+    <changeSet id="2" author="Fagner" failOnError="true">
+        <comment>USUARIO ADM</comment>
+        <sqlFile
+                encoding="utf8"
+                path="db/changelog/sql/02-tipo-usuario-permissoes.sql"
+                splitStatements="true"
+                stripComments="false"
+                endDelimiter=";"/>
+    </changeSet>
+
+    <changeSet id="3" author="Fagner" failOnError="true">
+        <comment>USUARIO ADM</comment>
+        <sqlFile
+                encoding="utf8"
+                path="db/changelog/sql/03-usuario-admin.sql"
+                splitStatements="true"
+                stripComments="false"
+                endDelimiter=";"/>
+    </changeSet>
+
+
+</databaseChangeLog>

@@ -11,4 +11,5 @@
     <include file="classpath:db/changelog/04-criar-imagens-folders-agenda-historicas.xml"/>
     <include file="classpath:db/changelog/05-criar-deletetables.xml"/>
     <include file="classpath:db/changelog/06-criar-usuario.xml"/>
+    <include file="classpath:db/changelog/07-insert-permissoes.xml"/>
 </databaseChangeLog>

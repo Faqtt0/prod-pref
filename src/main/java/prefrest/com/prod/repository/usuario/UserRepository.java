@@ -1,4 +1,4 @@
-package prefrest.com.prod.repository;
+package prefrest.com.prod.repository.usuario;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import prefrest.com.prod.model.Usuario;

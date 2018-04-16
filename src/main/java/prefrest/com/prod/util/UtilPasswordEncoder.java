@@ -11,5 +11,11 @@ public class UtilPasswordEncoder {
         return sb.toString();
     }
 
+    public static boolean isPassword(String info, String passwordEncoded){
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        boolean matches = passwordEncoder.matches(info, passwordEncoded);
+        return matches;
+    }
+
 
 }
