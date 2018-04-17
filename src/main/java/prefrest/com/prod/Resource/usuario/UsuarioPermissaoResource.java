@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import prefrest.com.prod.model.UsuarioPermissao;
 import prefrest.com.prod.service.usuario.UsuarioPermissaoService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -25,6 +26,9 @@ public class UsuarioPermissaoResource {
     }
 
     @PostMapping()
+    public ResponseEntity salvaUsuarioPermissao(@Valid @RequestBody List<UsuarioPermissao> permissoes){
+        return null;
+    }
 
     @PutMapping("/{codigo}")
 
