@@ -10,7 +10,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import prefrest.com.prod.exception.UsuarioException;
 import prefrest.com.prod.model.Usuario;
+import prefrest.com.prod.model.UsuarioPermissao;
 import prefrest.com.prod.repository.usuario.UserRepository;
+import prefrest.com.prod.repository.usuario.UsuarioPermissaoRepository;
 import prefrest.com.prod.util.UtilPasswordEncoder;
 
 import java.time.LocalDateTime;
@@ -22,6 +24,9 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UsuarioPermissaoRepository usuarioPermissaoRepository;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
@@ -40,6 +45,11 @@ public class CustomUserDetailService implements UserDetailsService {
         } else {
             Usuario usuario = userRepository.findByUsuario(s);
             Optional.ofNullable(usuario).orElseThrow(UsuarioException::new);
+
+            if (usuario.isInativo()){
+                throw new UsuarioException();
+            }
+
             List<GrantedAuthority> authorityList = AuthorityUtils.createAuthorityList("ROLE_USER", "ROLE_ADMIN");
             return new User(usuario.getUsuario(), usuario.getSenha(), authorityList);
         }

@@ -29,7 +29,7 @@ public class RefreshTokenCookiePreProcessorFilter implements Filter {
                          FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
 
-        if ("/oauth/token".equalsIgnoreCase(req.getRequestedSessionId())
+        if ("/oauth/token".equalsIgnoreCase(req.getRequestURI())
                 && "refresh_token".equals(req.getParameter("grant_type"))
                 && req.getCookies() != null) {
             for (Cookie cookie : req.getCookies()) {

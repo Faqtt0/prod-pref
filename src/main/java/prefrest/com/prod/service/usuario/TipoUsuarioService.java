@@ -27,17 +27,17 @@ public class TipoUsuarioService {
         TipoUsuario tipoUsuarioSalvo = tipoUsuarioRepository.save(tipoUsuario);
         publisher.publishEvent(new RecursoEvent(this, response, tipoUsuarioSalvo.getId()));
         if (tipoUsuarioSalvo != null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.CREATED).body(tipoUsuarioSalvo);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(tipoUsuarioSalvo);
+        return ResponseEntity.badRequest().build();
     }
 
     public ResponseEntity atualizar(Long codigo, TipoUsuario tipoUsuario) {
         TipoUsuario tipoUsuarioSalvo = tipoUsuarioRepository.findOne(codigo);
         if (tipoUsuario != null){
-            BeanUtils.copyProperties(tipoUsuario, tipoUsuarioSalvo, "ID");
+            BeanUtils.copyProperties(tipoUsuario, tipoUsuarioSalvo, "id");
             tipoUsuarioRepository.save(tipoUsuarioSalvo);
-            ResponseEntity.noContent().build();
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.badRequest().build();
     }

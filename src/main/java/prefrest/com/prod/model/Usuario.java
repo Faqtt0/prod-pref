@@ -5,7 +5,6 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 @Entity
 @Table(name = "USUARIOS")
@@ -29,6 +28,5 @@ public class Usuario {
     @Column(name = "CODTIPOUSUARIO")
     private Long codTipoUsuario;
 
-    @Transient
-    List<Permissao> permissoes;
+    private boolean inativo;
 }

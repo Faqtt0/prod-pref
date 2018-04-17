@@ -32,7 +32,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .scopes("read", "write")
                 .authorizedGrantTypes("password", "refresh_token")//fluxo PasswordFlow da aplicação que recebe usuário e senha do client. Fluxo somente utilizado se for aplicação que responde ao cliente que é implementado por você
                 //.accessTokenValiditySeconds((int) TimeUnit.SECONDS.convert(30, TimeUnit.MINUTES));//Token válido por 30 minutos
-                .accessTokenValiditySeconds(20)
+                .accessTokenValiditySeconds(100000)//TODO ALTERAR SEGUNDOS QUANDO ESTIVER EM PRODUÇÃO
                 .refreshTokenValiditySeconds((int) TimeUnit.SECONDS.convert(24, TimeUnit.HOURS));
 
     }

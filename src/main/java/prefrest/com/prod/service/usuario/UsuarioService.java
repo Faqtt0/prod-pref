@@ -36,10 +36,10 @@ public class UsuarioService {
     public ResponseEntity atualizarUsuario(Long codigo, Usuario usuario) {
         Usuario usuarioSalvo = userRepository.findOne(codigo);
         if (usuarioSalvo != null) {
-            BeanUtils.copyProperties(usuario, usuarioSalvo, "ID");
+            BeanUtils.copyProperties(usuario, usuarioSalvo, "id");
             usuarioSalvo.setSenha(UtilPasswordEncoder.encodePassword(usuarioSalvo.getSenha()));
             userRepository.save(usuarioSalvo);
-            ResponseEntity.noContent().build();
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.badRequest().build();
     }

@@ -16,5 +16,4 @@ public class UsuarioPermissao {
     @Id
     @Column(name = "CODPERMISSAO")
     private Long codPermissao;
-
 }

@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface UsuarioPermissaoRepository extends JpaRepository<UsuarioPermissao, UsuarioPermissaoID> {
     List<UsuarioPermissao> findAllByCodTipoUsuarioOrderByCodPermissao(Long codigoTipoUser);
+    int deleteAllByCodTipoUsuario(Long codTipoUsuario);
+    int deleteByCodPermissaoAndCodTipoUsuario(Long codPermissao, Long codTipoUser);
 }

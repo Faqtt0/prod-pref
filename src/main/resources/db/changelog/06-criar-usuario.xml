@@ -13,7 +13,7 @@
                              primaryKey="true"/>
             </column>
             <column name="TIPO" type="VARCHAR(100)">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
     </changeSet>
@@ -39,6 +39,7 @@
                              foreignKeyName="FK_USUARIOS_TIPOUSUARIO"
                              references="TIPOUSUARIO(ID)"/>
             </column>
+            <column name="INATIVO" type="BOOLEAN"/>
         </createTable>
 
         <modifySql dbms="mysql">
