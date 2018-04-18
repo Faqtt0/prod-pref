@@ -3,21 +3,23 @@ package prefrest.com.prod.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import prefrest.com.prod.exception.UsuarioException;
+import prefrest.com.prod.model.Permissao;
 import prefrest.com.prod.model.Usuario;
 import prefrest.com.prod.model.UsuarioPermissao;
+import prefrest.com.prod.repository.usuario.PermissaoRepository;
 import prefrest.com.prod.repository.usuario.UserRepository;
 import prefrest.com.prod.repository.usuario.UsuarioPermissaoRepository;
 import prefrest.com.prod.util.UtilPasswordEncoder;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class CustomUserDetailService implements UserDetailsService {
@@ -27,6 +29,9 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Autowired
     UsuarioPermissaoRepository usuarioPermissaoRepository;
+
+    @Autowired
+    PermissaoRepository permissaoRepository;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
@@ -50,9 +55,18 @@ public class CustomUserDetailService implements UserDetailsService {
                 throw new UsuarioException();
             }
 
-            List<GrantedAuthority> authorityList = AuthorityUtils.createAuthorityList("ROLE_USER", "ROLE_ADMIN");
-            return new User(usuario.getUsuario(), usuario.getSenha(), authorityList);
+            //List<GrantedAuthority> authorityList = AuthorityUtils.createAuthorityList("ROLE_USER", "ROLE_ADMIN");
+            return new User(usuario.getUsuario(), usuario.getSenha(), getPermissoesUsuario(usuario));
         }
 
+    }
+
+    private Collection<? extends GrantedAuthority> getPermissoesUsuario (Usuario usuario){
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        List<UsuarioPermissao> listaPermissao = usuarioPermissaoRepository.findAllByCodTipoUsuarioOrderByCodPermissao(usuario.getCodTipoUsuario());
+        List<Permissao> permissao =  new ArrayList<>();
+        listaPermissao.forEach(usuarioPermissao -> permissao.add(permissaoRepository.findOne(usuarioPermissao.getCodPermissao())));
+        permissao.forEach(perm -> authorities.add(new SimpleGrantedAuthority(perm.getPermissao())));
+        return authorities;
     }
 }

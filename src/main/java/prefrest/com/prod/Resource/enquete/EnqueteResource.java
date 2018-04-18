@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import prefrest.com.prod.event.RecursoEvent;
 import prefrest.com.prod.model.enquetes.Enquete;
@@ -43,6 +44,7 @@ public class EnqueteResource {
     }
 
     @GetMapping()
+    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_ENQUETE') and #oauth2.hasScope('read')")
     public List<Enquete> retornaEnquetes(EnqueteFilter filtro) {return repository.filtrarEnquetes(filtro);
     }
 
