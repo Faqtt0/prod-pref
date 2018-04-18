@@ -24,6 +24,7 @@ import static prefrest.com.prod.config.SecurityConstants.SIGN_UP;
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
+
     @Autowired
     CustomUserDetailService customUserDetailService;
 
