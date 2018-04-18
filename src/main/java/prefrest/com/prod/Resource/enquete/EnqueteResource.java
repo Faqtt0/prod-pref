@@ -38,27 +38,31 @@ public class EnqueteResource {
         return repository.filtrarEnquetes(id, descricao, ativo);
     }*/
 
+    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_ENQUETE') and #oauth2.hasScope('read')")
     @GetMapping("/all")
     private ResponseEntity<List<Enquete>> recuperaEnquetesTotem(FiltroPadrao filtroPadrao){
         return service.getAllenquetes(filtroPadrao);
     }
 
     @GetMapping()
-    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_ENQUETE') and #oauth2.hasScope('read')")
+    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_ENQUETE') and #oauth2.hasScope('read')")
     public List<Enquete> retornaEnquetes(EnqueteFilter filtro) {return repository.filtrarEnquetes(filtro);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_ENQUETE') and #oauth2.hasScope('read')")
     public ResponseEntity<Enquete> carregarEnqueteParc (@PathVariable Long id){
         return service.carregaEnqueteParcial(id);
     }
 
     @GetMapping("/{id}/{codigo}")
+    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_ENQUETE') and #oauth2.hasScope('read')")
     public ResponseEntity<List<Resposta>> buscarRespostas (@PathVariable Long id, @PathVariable Long codigo){
         return service.buscaRespostasPergunta(id, codigo);
     }
 
     @PostMapping()
+    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_ENQUETE') and #oauth2.hasScope('write')")
     public ResponseEntity<Enquete> salvarEnquete(@Valid @RequestBody Enquete enquete, HttpServletResponse response){
         Enquete enqueteSalva = service.salvar(enquete);
         publisher.publishEvent(new RecursoEvent(this, response, enqueteSalva.getId()));
@@ -66,11 +70,13 @@ public class EnqueteResource {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ATUALIZAR_ENQUETE') and #oauth2.hasScope('write')")
     public ResponseEntity<Enquete> atualizarEnquete(@PathVariable Long id, @Valid @RequestBody Enquete enquete) {
         return service.atualizaEnquete(id, enquete);
     }
 
     @DeleteMapping("/{codigo}")
+    @PreAuthorize("hasAuthority('ROLE_DELETAR_ENQUETE') and #oauth2.hasScope('write')")
     public ResponseEntity remover (@PathVariable Long codigo) {
         if (service.deletarEnquete(codigo)){
             return ResponseEntity.noContent().build();

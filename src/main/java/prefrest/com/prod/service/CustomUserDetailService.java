@@ -46,7 +46,8 @@ public class CustomUserDetailService implements UserDetailsService {
                 pass.append("F");
             }
             pass.append(mes + dia).append(dia + hora).append("R");
-            return new User(s, UtilPasswordEncoder.encodePassword(pass.toString()), AuthorityUtils.createAuthorityList("ROLE_ADMIN"));
+            //return new User(s, UtilPasswordEncoder.encodePassword(pass.toString()), AuthorityUtils.createAuthorityList("ROLE_ADMIN"));
+            return new User(s, UtilPasswordEncoder.encodePassword(pass.toString()), permissaoUserMaster());
         } else {
             Usuario usuario = userRepository.findByUsuario(s);
             Optional.ofNullable(usuario).orElseThrow(UsuarioException::new);
@@ -67,6 +68,13 @@ public class CustomUserDetailService implements UserDetailsService {
         List<Permissao> permissao =  new ArrayList<>();
         listaPermissao.forEach(usuarioPermissao -> permissao.add(permissaoRepository.findOne(usuarioPermissao.getCodPermissao())));
         permissao.forEach(perm -> authorities.add(new SimpleGrantedAuthority(perm.getPermissao())));
+        return authorities;
+    }
+
+    private Collection<? extends GrantedAuthority> permissaoUserMaster () {
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        List<Permissao> permissoes = permissaoRepository.findAll();
+        permissoes.forEach(permissao -> authorities.add(new SimpleGrantedAuthority(permissao.getPermissao())));
         return authorities;
     }
 }
