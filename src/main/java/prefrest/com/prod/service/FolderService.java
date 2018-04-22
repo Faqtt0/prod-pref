@@ -16,6 +16,7 @@ import prefrest.com.prod.repository.DeleteTablesRepository;
 import prefrest.com.prod.repository.FolderRespository;
 import prefrest.com.prod.repository.ImagemRepository;
 import prefrest.com.prod.repository.filter.FiltroPadrao;
+import prefrest.com.prod.repository.usuario.FolderPersonRepository;
 import prefrest.com.prod.util.UtilBase64Image;
 import prefrest.com.prod.util.UtilConverterImagem;
 
@@ -36,6 +37,9 @@ public class FolderService {
 
     @Autowired
     DeleteTablesRepository deleteTablesRepository;
+
+    @Autowired
+    FolderPersonRepository folderPersonRepository;
 
     public ResponseEntity<Folder> salvarFolder(Folder folder, HttpServletResponse response, ApplicationEventPublisher publisher) {
         folder.setUltAlt(LocalDateTime.now());
@@ -106,5 +110,10 @@ public class FolderService {
             folder.setImagem(imagemRepository.findById(folder.getCodImagem()));
             folder.getImagem().setImagemBase64(UtilBase64Image.encoder(folder.getImagem().getCaminho()));
         }
+    }
+
+    public ResponseEntity atualizarOrdemImagens(List<Folder> folders) {
+        folderPersonRepository.updateListaOrdemImagem(folders);
+        return ResponseEntity.noContent().build();
     }
 }

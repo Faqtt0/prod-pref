@@ -5,11 +5,16 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
+import prefrest.com.prod.model.Folder;
 import prefrest.com.prod.repository.CommomRepository;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 public class CommomRepositoryImpl implements CommomRepository {
@@ -59,6 +64,7 @@ public class CommomRepositoryImpl implements CommomRepository {
             sbSql.append(clazz.getSimpleName());
         }
     }
+
 
     public static boolean isEntity(Class clazz) {
         return clazz.getAnnotation(Entity.class) != null;

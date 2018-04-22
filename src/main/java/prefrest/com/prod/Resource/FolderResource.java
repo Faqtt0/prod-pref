@@ -35,6 +35,11 @@ public class FolderResource {
         return service.salvarFolder(folder, response, publisher) ;
     }
 
+    @PutMapping("/order")
+    public ResponseEntity atualizaOrdemListaImagens(@RequestBody List<Folder> folders){
+        return service.atualizarOrdemImagens(folders);
+    }
+
     @PutMapping("/{codigo}")
     @PreAuthorize("hasAuthority('ROLE_ATUALIZAR_FOLDER') and #oauth2.hasScope('write')")
     public ResponseEntity atualizarIFolderInfos(@PathVariable Long codigo,
