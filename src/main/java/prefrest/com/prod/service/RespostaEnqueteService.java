@@ -20,7 +20,7 @@ public class RespostaEnqueteService {
     RespostaEnqueteRespository respository;
 
     public ResponseEntity isRespostaEnquete(FiltroRespostaEnquete filtro) {
-        RespostaEnquete cpfAtivo = respository.findByCpfandAndIdEnquete(filtro.getCpf(), filtro.getIdEnquete());
+        RespostaEnquete cpfAtivo = respository.findByCpfAndIdEnquete(filtro.getCpf(), filtro.getIdEnquete());
         if (cpfAtivo != null){
             return ResponseEntity.badRequest().build();
         }
