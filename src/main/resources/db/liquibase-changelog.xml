@@ -13,4 +13,5 @@
     <include file="classpath:db/changelog/06-criar-usuario.xml"/>
     <include file="classpath:db/changelog/07-insert-permissoes.xml"/>
     <include file="classpath:db/changelog/08-criar-tabela-resposta-enquete.xml"/>
+    <include file="classpath:db/changelog/09-add-campos-extras.xml"/>
 </databaseChangeLog>

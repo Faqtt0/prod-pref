@@ -37,7 +37,7 @@ public class SegmentoResource {
     @GetMapping()
     @PreAuthorize("hasAuthority('ROLE_PESQUISAR_SEGMENTO') and #oauth2.hasScope('read')")
     public ResponseEntity<List<Segmento>> getAllSegmentos(){
-        return ResponseEntity.ok(segmentoRepository.findAll());
+        return ResponseEntity.ok(segmentoRepository.findAllOrderByImportancia());
     }
 
     @GetMapping("/all")

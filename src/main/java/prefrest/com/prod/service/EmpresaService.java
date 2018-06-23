@@ -60,6 +60,6 @@ public class EmpresaService {
             List<Empresa> empresas = empresaRespository.findAllByUltAltAfterOrderByUltAlt(LocalDateTime.parse(filtroPadrao.getAlteracao()));
             return ResponseEntity.ok().body(empresas);
         }
-        return ResponseEntity.ok().body(empresaRespository.findAll());
+        return ResponseEntity.ok().body(empresaRespository.findAllOrderByDescricaoDesc());
     }
 }

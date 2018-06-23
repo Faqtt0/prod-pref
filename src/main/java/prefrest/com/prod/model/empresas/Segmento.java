@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,6 +24,10 @@ public class Segmento {
     @NonNull
     @Size(min = 3, max = 150)
     private String descricao;
+
+    @NotNull
+    @Size(min = 1, max = 5)
+    private Integer importancia;
 
     @Transient
     List<Empresa> empresas;
