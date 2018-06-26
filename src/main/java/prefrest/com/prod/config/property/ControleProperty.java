@@ -24,6 +24,7 @@ public class ControleProperty {
     @Setter
     public static class Servidor{
         private String servidor;
+        private String externo;
     }
 
     @Getter
