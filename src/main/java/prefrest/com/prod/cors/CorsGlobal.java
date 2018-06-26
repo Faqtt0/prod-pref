@@ -25,7 +25,7 @@ public class CorsGlobal {
                                 "http://192.168.88.242:4200")
                         .allowCredentials(true)
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT")
-                        .allowedHeaders("Authorization", "Content-Type", "Accept")
+                        .allowedHeaders("Authorization", "Content-Type", "Accept", " X-PINGOTHER", "X-Requested-With", "Origin")
                         .maxAge(3600);
             }
         };
