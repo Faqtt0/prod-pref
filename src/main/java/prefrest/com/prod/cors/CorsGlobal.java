@@ -19,10 +19,7 @@ public class CorsGlobal {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins(controleProperty.getServidor().getServidor(),
-                                controleProperty.getServidor().getExterno(),
-                                "http://localhost:4200",
-                                "http://192.168.88.242:4200")
+                        .allowedOrigins("*")
                         .allowCredentials(true)
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT")
                         .allowedHeaders("Authorization", "Content-Type", "Accept", " X-PINGOTHER", "X-Requested-With", "Origin")
