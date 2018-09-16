@@ -3,12 +3,16 @@ package prefrest.com.prod.cors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import prefrest.com.prod.config.property.ControleProperty;
 
-@Configuration
+/*@Component
+@Order(Ordered.HIGHEST_PRECEDENCE)*/
 public class CorsGlobal {
     @Autowired
     ControleProperty controleProperty;
